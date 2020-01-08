@@ -18,6 +18,7 @@ public:
 
 private:
     ConnectionHandler &connectionHandler;
+    void messageExecutor( string subscription, string topic, string msgBody);
 
 
 

@@ -39,7 +39,10 @@ void serverHandler::run() {
             cout << errorMessage << endl;
         }
         else if(serverOutputMessage[0] == "MESSAGE") {
-
+            string subscription = serverOutputMessage[1].substr(serverOutputMessage[1].find(':'));
+            string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':'));
+            string msgBody = serverOutputMessage[4].substr(serverOutputMessage[4].find(':'));
+            messageExecutor(subscription,topic,msgBody);
 
         }
 
@@ -49,7 +52,13 @@ void serverHandler::run() {
 }
 
 
-} // end of run
+}
+
+void serverHandler::messageExecutor(string subscription, string topic, string msgBody) {
+
+
+}
+// end of run
 
 
 
