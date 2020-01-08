@@ -56,6 +56,9 @@ public:
     void setUserData( UserData &userData);
     bool isConnected();
 
+     UserData &getUserData();
+
+
 }; //class ConnectionHandler
  
 #endif

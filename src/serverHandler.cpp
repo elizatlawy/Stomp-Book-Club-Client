@@ -16,7 +16,7 @@ serverHandler::serverHandler(ConnectionHandler &connectionHandler) : connectionH
 }
 
 void serverHandler::run() {
-    while (connected){
+    while (connectionHandler.isConnected()){
         string message;
         connectionHandler.getLine(message);
         std::istringstream iss(message);
@@ -24,10 +24,36 @@ void serverHandler::run() {
                                          std::istream_iterator<std::string>());
         vector<std::string> serverOutputMessage = results;
         if(serverOutputMessage[0] == "CONNECTED"){
-
+            userData = connectionHandler.getUserData();
+            userData.logIn();
+            cout << "Login successful" << endl;
+        }
+        else if(serverOutputMessage[0] == "RECEIPT"){
+            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':'));
+            userData.setLastReceiptId(receiptId);
+        }
+        else if(serverOutputMessage[0] == "ERROR"){
+            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':'));
+            userData.setLastReceiptId(receiptId);
+            string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':'));
+            cout << errorMessage << endl;
+        }
+        else if(serverOutputMessage[0] == "MESSAGE") {
 
 
         }
+
+
+
+
+}
+
+
+} // end of run
+
+
+
+
 
 
 

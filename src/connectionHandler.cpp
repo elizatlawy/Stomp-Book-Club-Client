@@ -117,3 +117,10 @@ void ConnectionHandler::setUserData( UserData &userData) {
 bool ConnectionHandler::isConnected() {
     return connected;
 }
+
+ UserData &ConnectionHandler::getUserData()  {
+    return userData;
+}
+
+
+

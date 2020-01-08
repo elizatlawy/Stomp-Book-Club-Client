@@ -12,6 +12,7 @@
 class serverHandler {
 public:
     serverHandler(ConnectionHandler &connectionHandler);
+    UserData userData;
 
     void run();
 

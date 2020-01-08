@@ -4,11 +4,12 @@
 
 #ifndef BOOST_ECHO_CLIENT_USERDATA_H
 #define BOOST_ECHO_CLIENT_USERDATA_H
+
 #include <string>
 #include <iostream>
 #include <string>
-using namespace std;
 
+using namespace std;
 
 
 class UserData {
@@ -23,17 +24,22 @@ public:
 
     bool isLoggedIn();
 
+    void logIn();
+
+    void logout();
+
+    const string &getReceiptId() const;
+
+    void setLastReceiptId(const string &receiptId);
+
 private:
     string userName;
     string userPassword;
     bool loggedIn = false;
-    void logIn();
-    void logout();
+    string lastReceiptId;
 
 
 };
-
-
 
 
 #endif //BOOST_ECHO_CLIENT_USERDATA_H

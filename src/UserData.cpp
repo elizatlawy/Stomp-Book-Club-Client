@@ -34,3 +34,11 @@ void UserData::setUserName(const string &name) {
 void UserData::setUserPassword(const string &password) {
     UserData::userPassword = password;
 }
+
+const string &UserData::getReceiptId() const {
+    return lastReceiptId;
+}
+
+void UserData::setLastReceiptId(const string &receiptId) {
+    UserData::lastReceiptId = receiptId;
+}
