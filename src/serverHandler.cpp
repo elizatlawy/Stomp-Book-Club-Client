@@ -31,6 +31,7 @@ void serverHandler::run() {
         else if(serverOutputMessage[0] == "RECEIPT"){
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':'));
             userData.setLastReceiptId(receiptId);
+            // TODO: Create receiptId executor
         }
         else if(serverOutputMessage[0] == "ERROR"){
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':'));
