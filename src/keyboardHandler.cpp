@@ -14,50 +14,40 @@ void keyboardHandler::run() {
     loggedIn = false;
     cout << "enter input:" << endl;
     string lastUserInput;
-    while (!loggedIn){
+    while (!loggedIn) {
+        getline(cin, lastUserInput);
+        vector<string> userInputVector = parseInput(lastUserInput);
         if (userInputVector[0] == "login") {
             string loginMsg = decodeLogin(userInputVector);
             sendMessage(loginMsg);
+        }
+        while (connected) {
+            getline(cin, lastUserInput);
+            vector<string> userInputVector = parseInput(lastUserInput);
+            if (userInputVector[0] == "join") {
+                string joinMsg = decodeLogin(userInputVector);
+                sendMessage(joinMsg);
+            } else if (userInputVector[0] == "add") {
+                string addMsg = decodeLogin(userInputVector);
+                sendMessage(addMsg);
+            } else if (userInputVector[0] == "borrow") {
+                string borrowMsg = decodeLogin(userInputVector);
+                sendMessage(borrowMsg);
+            } else if (userInputVector[0] == "return") {
+                string returnMsg = decodeLogin(userInputVector);
+                sendMessage(returnMsg);
+            } else if (userInputVector[0] == "status") {
+                string statusMsg = decodeLogin(userInputVector);
+                sendMessage(statusMsg);
+            }
+        } // end of while
 
     }
-
-
-    while (connected) {
-        getline(cin, lastUserInput);
-        std::istringstream iss(lastUserInput);
-        std::vector<std::string> results(std::istream_iterator<std::string>{iss},
-                                         std::istream_iterator<std::string>());
-        vector<std::string> userInputVector = results;
-
-
-        }
-        else if (userInputVector[0] == "join") {
-            string joinMsg = decodeLogin(userInputVector);
-            sendMessage(joinMsg);
-        }
-        else if (userInputVector[0] == "add") {
-            string addMsg = decodeLogin(userInputVector);
-            sendMessage(addMsg);
-        }
-        else if (userInputVector[0] == "borrow") {
-            string borrowMsg = decodeLogin(userInputVector);
-            sendMessage(borrowMsg);
-        }
-        else if (userInputVector[0] == "return") {
-            string returnMsg = decodeLogin(userInputVector);
-            sendMessage(returnMsg);
-        }
-        else if (userInputVector[0] == "status") {
-            string statusMsg = decodeLogin(userInputVector);
-            sendMessage(statusMsg);
-        }
-    } // end of while
-
 }
 
 string keyboardHandler::decodeLogin(vector<string> &userInputVector ) {
-    string userName = userInputVector
-    string output = "CONNECT" + '\n' + "accept-version:"
+    string userName = userInputVector =
+   // string output = "CONNECT" + '\n' + "accept-version:"
 
 }
 
@@ -83,6 +73,15 @@ string keyboardHandler::decodeStatus(vector<string> &userInputVector) {
 }
 
 void keyboardHandler::sendMessage(string) {}
+
+vector<string> keyboardHandler::parseInput(string lastUserInput) {
+    std::istringstream iss(lastUserInput);
+    vector<string> results(istream_iterator<string>{iss},
+                           istream_iterator<string>());
+    return results;
+};
+
+
 
 
 

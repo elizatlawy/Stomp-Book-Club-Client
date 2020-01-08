@@ -25,9 +25,10 @@ private:
     string decodeReturn(vector<string> &userInputVector);
     string decodeStatus (vector<string> &userInputVector);
     void sendMessage (string msg);
+    vector<string> parseInput ( string lastUserInput);
 
 
 
-}; //
+};
 
 #endif //BOOST_ECHO_CLIENT_KEYBOARDHANDLER_H
