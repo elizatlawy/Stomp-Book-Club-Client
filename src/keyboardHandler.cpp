@@ -11,7 +11,6 @@
 using namespace std;
 
 void keyboardHandler::run() {
-    loggedIn = false;
     cout << "enter input:" << endl;
     string lastUserInput;
     while (!loggedIn) {

@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include "connectionHandler.h"
 
 using namespace std;
 
@@ -16,8 +17,7 @@ public:
     void run();
 
 private:
-    bool connected;
-    bool loggedIn;
+    ConnectionHandler &connectionHandler;
     string decodeLogin (vector<string> &userInputVector);
     string decodeJoin (vector<string> &userInputVector);
     string decodeAdd (vector<string> &userInputVector);

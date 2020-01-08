@@ -16,8 +16,8 @@ public:
     void run();
 
 private:
-    bool connected;
     ConnectionHandler &connectionHandler;
+
 
 
 

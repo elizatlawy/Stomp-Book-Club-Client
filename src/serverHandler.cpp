@@ -19,6 +19,17 @@ void serverHandler::run() {
     while (connected){
         string message;
         connectionHandler.getLine(message);
+        std::istringstream iss(message);
+        std::vector<std::string> results(std::istream_iterator<std::string>{iss},
+                                         std::istream_iterator<std::string>());
+        vector<std::string> serverOutputMessage = results;
+        if(serverOutputMessage[0] == "CONNECTED"){
+
+
+
+        }
+
+
 
 
 

@@ -4,6 +4,7 @@
 #include <string>
 #include <iostream>
 #include <boost/asio.hpp>
+#include "UserData.h"
 
 using boost::asio::ip::tcp;
 
@@ -12,7 +13,10 @@ private:
 	const std::string host_;
 	const short port_;
 	boost::asio::io_service io_service_;   // Provides core I/O functionality
-	tcp::socket socket_; 
+	tcp::socket socket_;
+    bool connected;
+    UserData userData;
+
  
 public:
     ConnectionHandler(std::string host, short port);
@@ -47,7 +51,10 @@ public:
 	
     // Close down the connection properly.
     void close();
- 
+
+    // ####### helper functions #####
+    void setUserData( UserData &userData);
+
 }; //class ConnectionHandler
  
 #endif
