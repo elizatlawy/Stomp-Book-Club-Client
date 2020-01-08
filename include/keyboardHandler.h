@@ -14,6 +14,8 @@ using namespace std;
 
 class keyboardHandler {
 public:
+    keyboardHandler(ConnectionHandler &connectionHandler);
+
     void run();
 
 private:

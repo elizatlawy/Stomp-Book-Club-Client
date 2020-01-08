@@ -10,20 +10,23 @@
 #include "keyboardHandler.h"
 using namespace std;
 
+keyboardHandler::keyboardHandler(ConnectionHandler &connectionHandler) : connectionHandler(connectionHandler) {}
+
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
+    vector<string> userInputVector;
     UserData userData;
     while (!userData.isLoggedIn()) {
         getline(cin, lastUserInput);
-        vector<string> userInputVector = parseInput(lastUserInput);
+        userInputVector = parseInput(lastUserInput);
         if (userInputVector[0] == "login") {
             string loginMsg = decodeLogin(userInputVector);
             sendMessage(loginMsg);
         }
         while (userData.isLoggedIn()) {
             getline(cin, lastUserInput);
-            vector<string> userInputVector = parseInput(lastUserInput);
+            userInputVector = parseInput(lastUserInput);
             if (userInputVector[0] == "join") {
                 string joinMsg = decodeLogin(userInputVector);
                 sendMessage(joinMsg);
