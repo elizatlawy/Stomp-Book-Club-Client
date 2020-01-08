@@ -28,6 +28,6 @@ private:
 
 
 
-};
+}; //
 
 #endif //BOOST_ECHO_CLIENT_KEYBOARDHANDLER_H
