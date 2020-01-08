@@ -20,7 +20,7 @@ public:
 
 private:
     ConnectionHandler &connectionHandler;
-    string decodeLogin (vector<string> &userInputVector);
+    string decodeLogin (vector<string> &userInputVector, UserData userData);
     string decodeJoin (vector<string> &userInputVector);
     string decodeAdd (vector<string> &userInputVector);
     string decodeBorrow (vector<string> &userInputVector);

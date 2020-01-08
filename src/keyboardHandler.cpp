@@ -21,7 +21,7 @@ void keyboardHandler::run() {
         getline(cin, lastUserInput);
         userInputVector = parseInput(lastUserInput);
         if (userInputVector[0] == "login") {
-            string loginMsg = decodeLogin(userInputVector);
+            string loginMsg = decodeLogin(userInputVector, userData);
             sendMessage(loginMsg);
         }
         while (userData.isLoggedIn()) {
@@ -48,9 +48,12 @@ void keyboardHandler::run() {
     }
 }
 
-string keyboardHandler::decodeLogin(vector<string> &userInputVector ) {
-    string userName = userInputVector =
-   // string output = "CONNECT" + '\n' + "accept-version:"
+string keyboardHandler::decodeLogin(vector<string> &userInputVector, UserData userData ) {
+    userData.setUserName(userInputVector[2]);
+    userData.setUserPassword(userInputVector[3]);
+    string output = string("CONNECT") + ('\n')  + string("accept-version:1.2");
+    cout << output << endl;
+    return output;
 
 }
 
@@ -83,13 +86,4 @@ vector<string> keyboardHandler::parseInput(string lastUserInput) {
                            istream_iterator<string>());
     return results;
 };
-
-
-
-
-
-
-
-
-
-
+}
