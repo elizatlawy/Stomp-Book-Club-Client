@@ -29,6 +29,7 @@ void keyboardHandler::run() {
                                          std::istream_iterator<std::string>());
         vector<std::string> userInputVector = results;
 
+
         }
         else if (userInputVector[0] == "join") {
             string joinMsg = decodeLogin(userInputVector);
