@@ -5,6 +5,11 @@
 #ifndef BOOST_ECHO_CLIENT_KEYBOARDHANDLER_H
 #define BOOST_ECHO_CLIENT_KEYBOARDHANDLER_H
 
+#include <string>
+#include <vector>
+
+using namespace std;
+
 
 class keyboardHandler {
 public:
@@ -12,10 +17,17 @@ public:
 
 private:
     bool connected;
+    bool loggedIn;
+    string decodeLogin (vector<string> &userInputVector);
+    string decodeJoin (vector<string> &userInputVector);
+    string decodeAdd (vector<string> &userInputVector);
+    string decodeBorrow (vector<string> &userInputVector);
+    string decodeReturn(vector<string> &userInputVector);
+    string decodeStatus (vector<string> &userInputVector);
+    void sendMessage (string msg);
 
 
 
 };
-
 
 #endif //BOOST_ECHO_CLIENT_KEYBOARDHANDLER_H
