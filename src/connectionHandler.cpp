@@ -114,3 +114,6 @@ void ConnectionHandler::close() {
 void ConnectionHandler::setUserData( UserData &userData) {
     ConnectionHandler::userData = userData;
 }
+bool ConnectionHandler::isConnected() {
+    return connected;
+}

@@ -12,42 +12,28 @@ using namespace std;
 
 
 class UserData {
-private:
-    bool loggedIn = false;
-    void logIn();
-    void logout();
-    bool isLoggedIn();
-
 public:
     const string &getUserName() const;
 
     const string &getUserPassword() const;
 
-    void setUserName(const string &userName);
+    void setUserName(const string &name);
 
-    void setUserPassword(const string &userPassword);
+    void setUserPassword(const string &password);
+
+    bool isLoggedIn();
 
 private:
     string userName;
     string userPassword;
+    bool loggedIn = false;
+    void logIn();
+    void logout();
+
 
 };
 
-const string &UserData::getUserName() const {
-    return userName;
-}
 
-const string &UserData::getUserPassword() const {
-    return userPassword;
-}
-
-void UserData::setUserName(const string &userName) {
-    UserData::userName = userName;
-}
-
-void UserData::setUserPassword(const string &userPassword) {
-    UserData::userPassword = userPassword;
-}
 
 
 #endif //BOOST_ECHO_CLIENT_USERDATA_H

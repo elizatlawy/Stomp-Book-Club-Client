@@ -54,6 +54,7 @@ public:
 
     // ####### helper functions #####
     void setUserData( UserData &userData);
+    bool isConnected();
 
 }; //class ConnectionHandler
  

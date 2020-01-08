@@ -18,3 +18,19 @@ void UserData::logout() {
 bool UserData::isLoggedIn() {
     return loggedIn;
 }
+
+const string &UserData::getUserName() const {
+    return userName;
+}
+
+const string &UserData::getUserPassword() const {
+    return userPassword;
+}
+
+void UserData::setUserName(const string &name) {
+    UserData::userName = name;
+}
+
+void UserData::setUserPassword(const string &password) {
+    UserData::userPassword = password;
+}

@@ -13,14 +13,15 @@ using namespace std;
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
-    while (!loggedIn) {
+    UserData userData;
+    while (!userData.isLoggedIn()) {
         getline(cin, lastUserInput);
         vector<string> userInputVector = parseInput(lastUserInput);
         if (userInputVector[0] == "login") {
             string loginMsg = decodeLogin(userInputVector);
             sendMessage(loginMsg);
         }
-        while (connected) {
+        while (userData.isLoggedIn()) {
             getline(cin, lastUserInput);
             vector<string> userInputVector = parseInput(lastUserInput);
             if (userInputVector[0] == "join") {
