@@ -4,10 +4,6 @@
 
 #include "UserData.h"
 
-
-
-
-
 void UserData::logIn() {
     loggedIn = true;
 }
@@ -41,4 +37,9 @@ const string &UserData::getReceiptId() const {
 
 void UserData::setLastReceiptId(const string &receiptId) {
     UserData::lastReceiptId = receiptId;
+}
+
+int UserData::incrementAndGetMsgCounter() {
+    messageId++;
+    return messageId;
 }

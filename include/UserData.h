@@ -32,11 +32,14 @@ public:
 
     void setLastReceiptId(const string &receiptId);
 
+    int incrementAndGetMsgCounter();
+
 private:
     string userName;
     string userPassword;
     bool loggedIn = false;
     string lastReceiptId;
+    int messageId = 0;
 
 
 };

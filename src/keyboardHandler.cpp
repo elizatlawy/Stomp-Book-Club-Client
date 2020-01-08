@@ -28,19 +28,19 @@ void keyboardHandler::run() {
             getline(cin, lastUserInput);
             userInputVector = parseInput(lastUserInput);
             if (userInputVector[0] == "join") {
-                string joinMsg = decodeLogin(userInputVector);
+                string joinMsg = decodeJoin(userInputVector);
                 sendMessage(joinMsg);
             } else if (userInputVector[0] == "add") {
-                string addMsg = decodeLogin(userInputVector);
+                string addMsg = decodeAdd(userInputVector);
                 sendMessage(addMsg);
             } else if (userInputVector[0] == "borrow") {
-                string borrowMsg = decodeLogin(userInputVector);
+                string borrowMsg = decodeBorrow(userInputVector);
                 sendMessage(borrowMsg);
             } else if (userInputVector[0] == "return") {
-                string returnMsg = decodeLogin(userInputVector);
+                string returnMsg = decodeReturn(userInputVector);
                 sendMessage(returnMsg);
             } else if (userInputVector[0] == "status") {
-                string statusMsg = decodeLogin(userInputVector);
+                string statusMsg = decodeStatus(userInputVector);
                 sendMessage(statusMsg);
             }
         } // end of while
@@ -51,13 +51,21 @@ void keyboardHandler::run() {
 string keyboardHandler::decodeLogin(vector<string> &userInputVector, UserData userData ) {
     userData.setUserName(userInputVector[2]);
     userData.setUserPassword(userInputVector[3]);
-    string output = string("CONNECT") + ('\n')  + string("accept-version:1.2");
-    cout << output << endl;
+    string output = string("CONNECT") + ('\n')
+            + string("accept-version:1.2") + ('\n')
+            + string("host:stomp.cs.bg.ac.il") + ('\n')
+            + string ("login:") + userData.getUserName() +('\n')
+            + string ("passcode:") + userData.getUserPassword();
     return output;
 
 }
 
 string keyboardHandler::decodeJoin(vector<string> &userInputVector) {
+    string topic = userInputVector[1];
+    string output = string("SUBSCRIBE") + ('\n')
+                    + string("destination:") + topic + ('\n')
+                    + string("id:") + ('\n')
+                    + string("receipt:") +
 
 }
 
