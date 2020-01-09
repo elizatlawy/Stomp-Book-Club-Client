@@ -58,7 +58,7 @@ void serverHandler::messageExecutor(string subscription, string topic, string ms
     if (msgBody.find("wish to borrow") != string::npos) {
         // TODO: check if +1 is needed to the position
         string bookName = msgBody.substr(msgBody.find_last_of(' ') + 1);
-        if (userData.isAvailableBook(topic, bookName)) { // if the user have the requested book
+        if (userData.isAvailableBook(topic, bookName)) { // if the user have the requested Book
             //string msg =
 
 

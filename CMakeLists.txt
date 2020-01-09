@@ -13,11 +13,13 @@ add_executable(Boost_Echo_Client
         include/connectionHandler.h
         include/StompBookClubClient.h
         include/UserData.h
+        include/Book.h
         src/connectionHandler.cpp
         src/echoClient.cpp
         src/StompBookClubClient.cpp
         src/main.cpp
         src/UserData.cpp
+        src/Book.cpp
         makefile)
 
 
