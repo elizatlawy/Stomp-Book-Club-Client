@@ -56,7 +56,7 @@ void userData::addBook(string topic, string book) {
 
 string userData::removeBook(string topic, string book) {
 
-}
+}/
 
 bool userData::isAvailableBook(string topic, string book) {
 
