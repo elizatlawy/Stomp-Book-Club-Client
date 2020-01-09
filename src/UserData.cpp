@@ -58,7 +58,7 @@ void UserData::addBook(string topic, Book& book) {
     listOfBooks.push_back(&book);
 }
 
-bool UserData::isAvailableBook(string topic, string requestedBookName) {
+bool UserData::isAvailableBook(string topic, const string& requestedBookName) {
     vector<Book*> listOfBooks = inventory.at(topic);
     for (Book* currBook : listOfBooks){
         if(currBook->getBookName() == requestedBookName)
@@ -66,7 +66,7 @@ bool UserData::isAvailableBook(string topic, string requestedBookName) {
     }
     return false;
 }
-void UserData::changeBookAvailability(string topic, string requestedBookName, bool status) {
+void UserData::changeBookAvailability(string topic, const string& requestedBookName, bool status) {
     vector<Book *> listOfBooks = inventory.at(topic);
     for (Book *currBook : listOfBooks) {
         if (currBook->getBookName() == requestedBookName)

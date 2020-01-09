@@ -4,13 +4,8 @@
 
 #include "Book.h"
 
-Book::Book(const string &bookName, const string &bookOwner, bool Borrowed) : bookName(bookName), bookOwner(bookOwner),
-                                                                             available(Borrowed) {}
-
-
-void Book::setBorrowed(bool isBorrowed) {
-    Book::available = isBorrowed;
-}
+Book::Book(const string &bookName, const string &bookOwner, bool isAvailable) : bookName(bookName), bookOwner(bookOwner),
+                                                                             available(isAvailable) {}
 
 const string &Book::getBookName() const {
     return bookName;
@@ -24,6 +19,6 @@ bool Book::isAvailable() const {
     return available;
 }
 
-void Book::setAvailable(bool available) {
-    Book::available = available;
+void Book::setAvailable(bool isAvailable) {
+    Book::available = isAvailable;
 }

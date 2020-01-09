@@ -45,8 +45,8 @@ public:
 
     void addBook (string topic, Book& book);
 
-    bool isAvailableBook (string topic, string requestedBookName);
-    void changeBookAvailability(string topic, string requestedBookName, bool status);
+    bool isAvailableBook (string topic, const string& requestedBookName);
+    void changeBookAvailability(string topic, const string& requestedBookName, bool status);
 
     const vector<string> &getWishList() const;
     void addToWishList(string bookName);

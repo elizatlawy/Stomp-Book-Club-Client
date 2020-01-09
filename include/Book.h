@@ -11,16 +11,13 @@ using namespace std;
 
 class Book {
 public:
-    Book(const string &bookName, const string &bookOwner, bool isBorrowed); // constructor
+    Book(const string &bookName, const string &bookOwner, bool available); // constructor
 
     const string &getBookName() const;
 
     const string &getBookOwner() const;
 
     bool isAvailable() const;
-
-    void setBorrowed(bool isBorrowed);
-
     void setAvailable(bool available);
 
 private:
