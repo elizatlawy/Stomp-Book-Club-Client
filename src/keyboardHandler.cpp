@@ -16,13 +16,13 @@ void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
     vector<string> userInputVector;
-    UserData userData;
+    userData userData(nullptr);
     // while user not logged in, he cant to do any command besides login
     while (!userData.isLoggedIn()) {
         getline(cin, lastUserInput);
         userInputVector = parseInput(lastUserInput);
         if (userInputVector[0] == "login") {
-            string loginMsg = decodeLogin(userInputVector, userData);
+            string loginMsg = processLogin(userInputVector, userData);
             sendMessage(loginMsg);
         }
         // user is now logged in
@@ -30,19 +30,22 @@ void keyboardHandler::run() {
             getline(cin, lastUserInput);
             userInputVector = parseInput(lastUserInput);
             if (userInputVector[0] == "join") {
-                string joinMsg = decodeJoin(userInputVector);
+                string joinMsg = processJoin(userInputVector);
                 sendMessage(joinMsg);
             } else if (userInputVector[0] == "add") {
-                string addMsg = decodeAdd(userInputVector);
+                string addMsg = processAdd(userInputVector);
+                sendMessage(addMsg);
+            } else if (userInputVector[0] == "exit") {
+                string addMsg = processAdd(userInputVector);
                 sendMessage(addMsg);
             } else if (userInputVector[0] == "borrow") {
-                string borrowMsg = decodeBorrow(userInputVector);
+                string borrowMsg = processBorrow(userInputVector);
                 sendMessage(borrowMsg);
             } else if (userInputVector[0] == "return") {
-                string returnMsg = decodeReturn(userInputVector);
+                string returnMsg = processReturn(userInputVector);
                 sendMessage(returnMsg);
             } else if (userInputVector[0] == "status") {
-                string statusMsg = decodeStatus(userInputVector);
+                string statusMsg = processStatus(userInputVector);
                 sendMessage(statusMsg);
             }
         } // end of while
@@ -50,41 +53,51 @@ void keyboardHandler::run() {
     }
 }
 
-string keyboardHandler::decodeLogin(vector<string> &userInputVector, UserData userData ) {
+string keyboardHandler::processLogin(vector<string> &userInputVector, userData userData ) {
+    // set userName and password
     userData.setUserName(userInputVector[2]);
     userData.setUserPassword(userInputVector[3]);
+    // decode msg
     string output = string("CONNECT") + ('\n')
             + string("accept-version:1.2") + ('\n')
             + string("host:stomp.cs.bg.ac.il") + ('\n')
             + string ("login:") + userData.getUserName() +('\n')
             + string ("passcode:") + userData.getUserPassword();
     return output;
-
 }
 
-string keyboardHandler::decodeJoin(vector<string> &userInputVector, UserData userData){
+string keyboardHandler::processJoin(vector<string> &userInputVector, userData userData){
+    // add to actionLog
     string topic = userInputVector[1];
+    string receiptId = to_string(userData.incrementAndGetReceiptCounter());
+    string msg = "Joined club " + topic;
+    userData.addToActionLog(receiptId, msg);
+    // decode msg
+    string subscriptionId = to_string(userData.incrementAndGetSubscriptionCounter());
     string output = string("SUBSCRIBE") + ('\n')
                     + string("destination:") + topic + ('\n')
-                    + string("id:") + ('\n')
-                    + string("receipt:") + to_string(userData.incrementAndGetReceiptCounter()) + ('\n')
-                    + string("")
+                    + string("id:") + receiptId + ('\n')
+                    + string("receipt:") + subscriptionId;
 }
 
-string keyboardHandler::decodeAdd(vector<string> &userInputVector) {
-
-}
-
-string keyboardHandler::decodeBorrow(vector<string> &userInputVector) {
+string keyboardHandler::processSubscribe(vector<string> &userInputVector) {
 
 }
 
-
-string keyboardHandler::decodeReturn(vector<string> &userInputVector) {
+string keyboardHandler::processUnsbscribe(vector<string> &userInputVector) {
 
 }
 
-string keyboardHandler::decodeStatus(vector<string> &userInputVector) {
+string keyboardHandler::processBorrow(vector<string> &userInputVector) {
+
+}
+
+
+string keyboardHandler::processReturn(vector<string> &userInputVector) {
+
+}
+
+string keyboardHandler::processStatus(vector<string> &userInputVector) {
 
 }
 

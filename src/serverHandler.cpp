@@ -11,7 +11,8 @@
 #include "serverHandler.h"
 using namespace std;
 
-serverHandler::serverHandler(ConnectionHandler &connectionHandler) : connectionHandler(connectionHandler) {
+serverHandler::serverHandler(ConnectionHandler &connectionHandler) : connectionHandler(connectionHandler),
+                                                                     userData(nullptr) {
 
 }
 

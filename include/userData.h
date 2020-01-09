@@ -13,9 +13,9 @@
 using namespace std;
 
 
-class UserData {
+class userData {
 public:
-    UserData();
+    userData(unordered_map<std::string, std::vector<string>> inventory);
 
     const string &getUserName() const;
 
@@ -40,7 +40,14 @@ public:
     int incrementAndGetReceiptCounter();
 
     void addToActionLog(string receiptId, string msg);
+
     string getOutputMessage(string receiptId);
+
+    void addBook (string topic, string book);
+
+    string removeBook (string topic, string book);
+
+    bool isAvailableBook (string topic, string book);
 
 private:
     string userName;
@@ -49,7 +56,7 @@ private:
     int subscriptionId;
     int receiptId;
     unordered_map<std::string,std::string> actionLog;
-
+    unordered_map<std::string,std::vector<string>> inventory;
 };
 
 

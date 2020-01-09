@@ -4,7 +4,7 @@
 #include <string>
 #include <iostream>
 #include <boost/asio.hpp>
-#include "UserData.h"
+#include "userData.h"
 
 using boost::asio::ip::tcp;
 
@@ -15,7 +15,7 @@ private:
 	boost::asio::io_service io_service_;   // Provides core I/O functionality
 	tcp::socket socket_;
     bool connected;
-    UserData userData;
+    userData userData;
 
  
 public:
@@ -53,10 +53,10 @@ public:
     void close();
 
     // ####### helper functions #####
-    void setUserData( UserData &userData);
+    void setUserData(userData &userData);
     bool isConnected();
 
-     UserData &getUserData();
+     userData &getUserData();
 
 
 }; //class ConnectionHandler

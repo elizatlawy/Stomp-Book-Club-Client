@@ -20,12 +20,13 @@ public:
 
 private:
     ConnectionHandler &connectionHandler;
-    string decodeLogin (vector<string> &userInputVector, UserData userData);
-    string decodeJoin (vector<string> &userInputVector, UserData userData);
-    string decodeAdd (vector<string> &userInputVector);
-    string decodeBorrow (vector<string> &userInputVector);
-    string decodeReturn(vector<string> &userInputVector);
-    string decodeStatus (vector<string> &userInputVector);
+    string processLogin (vector<string> &userInputVector, userData userData);
+    string processJoin (vector<string> &userInputVector, userData userData);
+    string processSubscribe (vector<string> &userInputVector);
+    string processUnsbscribe (vector<string> &userInputVector);
+    string processBorrow (vector<string> &userInputVector);
+    string processReturn(vector<string> &userInputVector);
+    string processStatus (vector<string> &userInputVector);
     void sendMessage (string msg);
     vector<string> parseInput ( string lastUserInput);
 
