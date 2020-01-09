@@ -46,10 +46,9 @@ private:
     string userName;
     string userPassword;
     bool loggedIn;
-    string lastReceiptId;
     int subscriptionId;
     int receiptId;
-    unordered_map<string,string> actionLog;
+    unordered_map<std::string,std::string> actionLog;
 
 };
 

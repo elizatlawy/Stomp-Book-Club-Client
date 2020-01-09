@@ -33,21 +33,13 @@ void UserData::setUserPassword(const string &password) {
     UserData::userPassword = password;
 }
 
-const string &UserData::getReceiptId() const {
-    return lastReceiptId;
-}
-
-void UserData::setLastReceiptId(const string &receiptId) {
-    UserData::lastReceiptId = receiptId;
-}
-
 int UserData::incrementAndGetSubscriptionCounter() {
     subscriptionId++;
     return subscriptionId;
 }
 
 void UserData::addToActionLog(string receiptId, string msg) {
-    actionLog.insert(receiptId,msg);
+    actionLog.insert(make_pair(receiptId,msg));
 }
 string UserData::getOutputMessage(string receiptId) {
     return actionLog.at(receiptId);

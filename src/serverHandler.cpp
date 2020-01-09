@@ -30,8 +30,8 @@ void serverHandler::run() {
         }
         else if(serverOutputMessage[0] == "RECEIPT"){
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':'));
-            userData.setLastReceiptId(receiptId);
-            // TODO: Create receiptId executor
+            cout << userData.getOutputMessage(receiptId) << endl;
+
         }
         else if(serverOutputMessage[0] == "ERROR"){
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':'));
@@ -44,7 +44,6 @@ void serverHandler::run() {
             string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':'));
             string msgBody = serverOutputMessage[4].substr(serverOutputMessage[4].find(':'));
             messageExecutor(subscription,topic,msgBody);
-
         }
 
 
