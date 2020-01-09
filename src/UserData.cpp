@@ -74,3 +74,15 @@ void UserData::changeBookAvailability(string topic, string requestedBookName, bo
     }
 }
 
+const vector<string> &UserData::getWishList() const {
+    return wishList;
+}
+
+void UserData::addToWishList(string bookName) {
+    wishList.push_back(bookName);
+}
+
+void UserData::removeFromWishList(string bookName) {
+    wishList.erase(std::remove(wishList.begin(), wishList.end(), bookName), wishList.end());
+}
+

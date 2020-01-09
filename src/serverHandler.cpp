@@ -8,36 +8,36 @@
 #include <vector>
 #include <sstream>
 #include <iterator>
+#include <include/Book.h>
 #include "serverHandler.h"
 using namespace std;
 
-serverHandler::serverHandler(ConnectionHandler &connectionHandler) : connectionHandler(connectionHandler),
-                                                                     userData(connectionHandler.getUserData()) {
+serverHandler::serverHandler(ConnectionHandler &connectionHandler) : connectionHandler(&connectionHandler),
+                                                                     userData(&connectionHandler.getUserData()) {
 
 }
 
 void serverHandler::run() {
-    while (connectionHandler.isConnected()){
+    while (connectionHandler->isConnected()){
         string message;
-        connectionHandler.getLine(message);
+        connectionHandler->getLine(message);
         std::istringstream iss(message);
         std::vector<std::string> results(std::istream_iterator<std::string>{iss},
                                          std::istream_iterator<std::string>());
         vector<std::string> serverOutputMessage = results;
         if(serverOutputMessage[0] == "CONNECTED"){
-            userData = connectionHandler.getUserData();
-            userData.logIn();
+            userData->logIn();
             cout << "Login successful" << endl;
         }
         else if(serverOutputMessage[0] == "RECEIPT"){
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
             // prints to the screen
-            cout << userData.getOutputMessage(receiptId) << endl;
+            cout << userData->getOutputMessage(receiptId) << endl;
 
         }
         else if(serverOutputMessage[0] == "ERROR"){
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-            userData.setLastReceiptId(receiptId);
+            userData->setLastReceiptId(receiptId);
             string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') + 1);
             cout << errorMessage << endl;
         }
@@ -58,18 +58,21 @@ void serverHandler::messageExecutor(string subscription, string topic, string ms
     if (msgBody.find("wish to borrow") != string::npos) {
         // TODO: check if +1 is needed to the position
         string bookName = msgBody.substr(msgBody.find_last_of(' ') + 1);
-        if (userData.isAvailableBook(topic, bookName)) { // if the user have the requested Book
-            //string msg =
-
-
+        if (userData->isAvailableBook(topic,bookName)) { // if the user have the requested Book
+            string output = string("SEND") + '\n'
+                            + string("destination:") + topic + '\n'
+                            + userData->getUserName()+ (" ") + string("has ") + bookName + '\n' + '\0';
         }
+    } // end of wish
+    // message type is {User} has {bookName}
+    if (msgBody.find(" has ") != string::npos) {
 
 
-    }
+    } // end of
 }
 
 void serverHandler::sendMessage(string msg) {
-    connectionHandler.sendLine(msg);
+    connectionHandler->sendLine(msg);
 }
 
 
@@ -77,8 +80,7 @@ void serverHandler::sendMessage(string msg) {
 
 
 
-
-
+->
 
 
 

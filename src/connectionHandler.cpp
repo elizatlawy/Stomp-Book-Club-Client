@@ -117,7 +117,7 @@ bool ConnectionHandler::isConnected() {
 }
 
  UserData &ConnectionHandler::getUserData()  {
-    return userData;
+    return *userData;
 }
 
 

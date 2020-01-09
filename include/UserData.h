@@ -48,6 +48,10 @@ public:
     bool isAvailableBook (string topic, string requestedBookName);
     void changeBookAvailability(string topic, string requestedBookName, bool status);
 
+    const vector<string> &getWishList() const;
+    void addToWishList(string bookName);
+    void removeFromWishList(string bookName);
+
 private:
     string userName;
     string userPassword;
@@ -56,7 +60,11 @@ private:
     int receiptId;
     unordered_map<std::string,std::string> actionLog;
     unordered_map<std::string,std::vector<Book*>> inventory;
+    vector<string> wishList; // vector of wished book names
+
 };
+
+
 
 
 #endif //BOOST_ECHO_CLIENT_USERDATA_H

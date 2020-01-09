@@ -7,7 +7,11 @@
 using namespace std;
 
 int main(int argc, char **argv) {
-    string output = string("CONNECT") + '\n'  + string("accept-version:1.2");
+    string topic = "topic";
+    string receiptId = "receiptId";
+    string output = string("SEND") + '\n'
+                    + string("destination:") + topic + '\n'
+                    + ("Eli ") + string("has ") + ("bookname") + '\n' + '\0';
     cout << output << endl;
     return 0;
 }

@@ -15,7 +15,7 @@ private:
 	boost::asio::io_service io_service_;   // Provides core I/O functionality
 	tcp::socket socket_;
     bool connected;
-    UserData userData;
+    UserData *userData;
 
  
 public:
