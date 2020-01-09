@@ -32,6 +32,9 @@ void serverHandler::run() {
             // if it is the answer of the disconnect message logout
             if (receiptId == userData->getDisconnectReceiptId())
                 userData->logout();
+            if(userData->getCommandType(receiptId) == "SUBSCRIBE"){
+                // todo add the subscription to map
+            }
             cout << userData->getOutputMessage(receiptId) << endl;
 
         } else if (serverOutputMessage[0] == "ERROR") {
