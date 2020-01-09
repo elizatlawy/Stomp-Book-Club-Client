@@ -3,8 +3,9 @@
 //
 
 #include <vector>
-#include <include/Book.h>
+#include "Book.h"
 #include "UserData.h"
+#include <algorithm>
 
 UserData::UserData()
         : loggedIn(false), subscriptionId(0), receiptId(0), actionLog(), inventory(unordered_map<std::string, std::vector<Book*>>()) {}
@@ -53,16 +54,23 @@ void UserData::addBook(string topic, Book& book) {
         inventory.insert(make_pair(topic, vector<Book*>()));
     }
     // topic is exist
-
+    vector<Book*> listOfBooks = inventory.at(topic);
+    listOfBooks.push_back(&book);
 }
 
-string UserData::removeBook(string topic, Book& book) {
-
+bool UserData::isAvailableBook(string topic, string requestedBookName) {
+    vector<Book*> listOfBooks = inventory.at(topic);
+    for (Book* currBook : listOfBooks){
+        if(currBook->getBookName() == requestedBookName)
+            return currBook->isAvailable();
+    }
+    return false;
 }
-
-bool UserData::isAvailableBook(string topic, Book& book) {
-
+void UserData::changeBookAvailability(string topic, string requestedBookName, bool status) {
+    vector<Book *> listOfBooks = inventory.at(topic);
+    for (Book *currBook : listOfBooks) {
+        if (currBook->getBookName() == requestedBookName)
+            currBook->setAvailable(status);
+    }
 }
-
-
 

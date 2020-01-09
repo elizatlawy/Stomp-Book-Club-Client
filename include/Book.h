@@ -17,14 +17,16 @@ public:
 
     const string &getBookOwner() const;
 
-    bool isBorrowed() const;
+    bool isAvailable() const;
 
     void setBorrowed(bool isBorrowed);
+
+    void setAvailable(bool available);
 
 private:
     string bookName;
     string bookOwner;
-    bool borrowed;
+    bool available;
 
 };
 

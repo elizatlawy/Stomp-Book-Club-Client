@@ -19,10 +19,10 @@ public:
     void run();
 
 private:
-    ConnectionHandler &connectionHandler;
-    userData &userData;
-    string processLogin (vector<string> &userInputVector, userData userData);
-    string processJoin (vector<string> &userInputVector, userData userData);
+    ConnectionHandler *connectionHandler;
+    UserData *userData;
+    string processLogin (vector<string> &userInputVector );
+    string processJoin (vector<string> &userInputVector);
     string processSubscribe (vector<string> &userInputVector);
     string processUnsubscribe (vector<string> &userInputVector);
     string processBorrow (vector<string> &userInputVector);

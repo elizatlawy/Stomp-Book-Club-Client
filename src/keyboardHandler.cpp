@@ -7,25 +7,27 @@
 #include <vector>
 #include <sstream>
 #include <iterator>
+#include <include/Book.h>
 #include "keyboardHandler.h"
+
 using namespace std;
 
-keyboardHandler::keyboardHandler(ConnectionHandler &connectionHandler) : connectionHandler(connectionHandler), userData(connectionHandler.getUserData()) {}
+keyboardHandler::keyboardHandler(ConnectionHandler &connectionHandler) : connectionHandler(&connectionHandler), userData(&connectionHandler.getUserData()) {}
 
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
     vector<string> userInputVector;
     // while user not logged in, he cant to do any command besides login
-    while (!userData.isLoggedIn()) {
+    while (!userData->isLoggedIn()) {
         getline(cin, lastUserInput);
         userInputVector = parseInput(lastUserInput);
         if (userInputVector[0] == "login") {
-            string loginMsg = processLogin(userInputVector, userData);
+            string loginMsg = processLogin(userInputVector);
             sendMessage(loginMsg);
         }
         // user is now logged in
-        while (userData.isLoggedIn()) {
+        while (userData->isLoggedIn()) {
             getline(cin, lastUserInput);
             userInputVector = parseInput(lastUserInput);
             if (userInputVector[0] == "join") {
@@ -51,39 +53,61 @@ void keyboardHandler::run() {
     }
 }
 
-string keyboardHandler::processLogin(vector<string> &userInputVector, userData userData ) {
+string keyboardHandler::processLogin(vector<string> &userInputVector) {
     // set userName and password
-    userData.setUserName(userInputVector[2]);
-    userData.setUserPassword(userInputVector[3]);
+    userData->setUserName(userInputVector[2]);
+    userData->setUserPassword(userInputVector[3]);
     // decode msg
-    string output = string("CONNECT") + ('\n')
-            + string("accept-version:1.2") + ('\n')
-            + string("host:stomp.cs.bg.ac.il") + ('\n')
-            + string ("login:") + userData.getUserName() +('\n')
-            + string ("passcode:") + userData.getUserPassword();
+    string output = string("CONNECT") + '\n'
+            + string("accept-version:1.2") + '\n'
+            + string("host:stomp.cs.bg.ac.il") + '\n'
+            + string ("login:") + userData->getUserName() +'\n'
+            + string ("passcode:") + userData->getUserPassword() + '\n' + '\0' ;
     return output;
 }
 
-string keyboardHandler::processJoin(vector<string> &userInputVector, userData userData){
+string keyboardHandler::processJoin(vector<string> &userInputVector){
     // add to actionLog
     string topic = userInputVector[1];
-    string receiptId = to_string(userData.incrementAndGetReceiptCounter());
+    string receiptId = to_string(userData->incrementAndGetReceiptCounter());
     string msg = "Joined club " + topic;
-    userData.addToActionLog(receiptId, msg);
+    userData->addToActionLog(receiptId, msg);
     // decode msg
-    string subscriptionId = to_string(userData.incrementAndGetSubscriptionCounter());
-    string output = string("SUBSCRIBE") + ('\n')
-                    + string("destination:") + topic + ('\n')
-                    + string("id:") + receiptId + ('\n')
-                    + string("receipt:") + subscriptionId;
+    string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
+    string output = string("SUBSCRIBE") + '\n'
+                    + string("destination:") + topic + '\n'
+                    + string("id:") + subscriptionId + '\n'
+                    + string("receipt:") + receiptId + '\n' + '\0' ;
+    return output;
 }
 
 string keyboardHandler::processSubscribe(vector<string> &userInputVector) {
-
+// add to inventory
+    string topic = userInputVector[1];
+    string bookName = userInputVector[2];
+    string userName = userData->getUserName();
+    Book* currBook = new Book(bookName,userName,false);
+    userData->addBook(topic, *currBook);
+    // decode msg
+    string msgBody = userName + " has added the book Foundation";
+    string output = string("SEND") + '\n'
+                    + string("destination:") + topic + '\n'
+                    + msgBody + '\n' + '\0';
+    return output;
 }
 
 string keyboardHandler::processUnsubscribe(vector<string> &userInputVector) {
-
+    // add to actionLog
+    string topic = userInputVector[1];
+    string receiptId = to_string(userData->incrementAndGetReceiptCounter());
+    string msg = "Exited club club " + topic;
+    userData->addToActionLog(receiptId, msg);
+    // decode msg
+    string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
+    string output = string("UNSUBSCRIBE") + '\n'
+                    + string("id:") + subscriptionId + '\n'
+                    + string("receipt:") + receiptId + '\n' + '\0' ;
+    return output;
 }
 
 string keyboardHandler::processBorrow(vector<string> &userInputVector) {
@@ -100,7 +124,7 @@ string keyboardHandler::processStatus(vector<string> &userInputVector) {
 }
 
 void keyboardHandler::sendMessage(string msg) {
-    connectionHandler.sendLine(msg);
+    connectionHandler->sendLine(msg);
 }
 
 vector<string> keyboardHandler::parseInput(string lastUserInput) {

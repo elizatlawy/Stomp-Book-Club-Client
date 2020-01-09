@@ -9,9 +9,9 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include "Book.h"
 
 using namespace std;
-
 
 class UserData {
 public:
@@ -45,9 +45,8 @@ public:
 
     void addBook (string topic, Book& book);
 
-    string removeBook (string topic, Book& book);
-
-    bool isAvailableBook (string topic, Book& book);
+    bool isAvailableBook (string topic, string requestedBookName);
+    void changeBookAvailability(string topic, string requestedBookName, bool status);
 
 private:
     string userName;
