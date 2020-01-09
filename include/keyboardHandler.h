@@ -14,7 +14,7 @@ using namespace std;
 
 class keyboardHandler {
 public:
-    keyboardHandler(ConnectionHandler &connectionHandler);
+    keyboardHandler();
 
     void run();
 
@@ -28,8 +28,9 @@ private:
     string processBorrow (vector<string> &userInputVector);
     string processReturn(vector<string> &userInputVector);
     string processStatus (vector<string> &userInputVector);
+    string processLogOut();
     void sendMessage (string msg);
-    vector<string> parseInput ( string lastUserInput);
+
 
 
 

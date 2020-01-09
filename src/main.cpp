@@ -4,14 +4,21 @@
 
 
 #include <iostream>
+
+
 using namespace std;
 
 int main(int argc, char **argv) {
-    string topic = "topic";
-    string receiptId = "receiptId";
-    string output = string("SEND") + '\n'
-                    + string("destination:") + topic + '\n'
-                    + ("Eli ") + string("has ") + ("bookname") + '\n' + '\0';
-    cout << output << endl;
-    return 0;
+
+    string test = "1.1.1.1:2000";
+    string host = test.substr(0, test.find(':'));
+    string port = test.substr(test.find(':')+1, test.size());
+
+    cout << "host: " + host << endl;
+    cout << "port: " + port << endl;
+
+
 }
+
+
+

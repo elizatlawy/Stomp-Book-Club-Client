@@ -56,6 +56,8 @@ public:
 
     void setDisconnectReceiptId(string disconnectReceiptId);
 
+    vector<string> parseInput ( string lastUserInput);
+
 private:
     string userName;
     string userPassword;
