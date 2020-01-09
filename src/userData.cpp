@@ -5,8 +5,8 @@
 #include <vector>
 #include "userData.h"
 
-userData::userData(unordered_map<std::string, std::vector<string>> inventory)
-        : loggedIn(false), subscriptionId(0), receiptId(0), actionLog(), inventory(inventory) {}
+userData::userData()
+        : loggedIn(false), subscriptionId(0), receiptId(0), actionLog(), inventory(unordered_map<std::string, std::vector<string>>()) {}
 
 void userData::logIn() {
     loggedIn = true;

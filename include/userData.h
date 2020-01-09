@@ -15,7 +15,7 @@ using namespace std;
 
 class userData {
 public:
-    userData(unordered_map<std::string, std::vector<string>> inventory);
+    userData();
 
     const string &getUserName() const;
 
