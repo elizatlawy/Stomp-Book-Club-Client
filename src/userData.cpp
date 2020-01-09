@@ -51,6 +51,7 @@ void userData::addBook(string topic, string book) {
     if (inventory.find(topic) == inventory.end()) {
         inventory.insert(make_pair(topic, vector<string>()));
     }
+    // topic is exist
 
 }
 
