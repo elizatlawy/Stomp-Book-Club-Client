@@ -10,13 +10,12 @@
 #include "keyboardHandler.h"
 using namespace std;
 
-keyboardHandler::keyboardHandler(ConnectionHandler &connectionHandler) : connectionHandler(connectionHandler) {}
+keyboardHandler::keyboardHandler(ConnectionHandler &connectionHandler) : connectionHandler(connectionHandler), userData(connectionHandler.getUserData()) {}
 
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
     vector<string> userInputVector;
-    UserData userData(nullptr);
     // while user not logged in, he cant to do any command besides login
     while (!userData.isLoggedIn()) {
         getline(cin, lastUserInput);
@@ -33,10 +32,10 @@ void keyboardHandler::run() {
                 string joinMsg = processJoin(userInputVector);
                 sendMessage(joinMsg);
             } else if (userInputVector[0] == "add") {
-                string addMsg = processAdd(userInputVector);
+                string addMsg = processSubscribe(userInputVector);
                 sendMessage(addMsg);
             } else if (userInputVector[0] == "exit") {
-                string addMsg = processAdd(userInputVector);
+                string addMsg = processUnsubscribe(userInputVector);
                 sendMessage(addMsg);
             } else if (userInputVector[0] == "borrow") {
                 string borrowMsg = processBorrow(userInputVector);
@@ -49,11 +48,10 @@ void keyboardHandler::run() {
                 sendMessage(statusMsg);
             }
         } // end of while
-
     }
 }
 
-string keyboardHandler::processLogin(vector<string> &userInputVector, UserData userData ) {
+string keyboardHandler::processLogin(vector<string> &userInputVector, userData userData ) {
     // set userName and password
     userData.setUserName(userInputVector[2]);
     userData.setUserPassword(userInputVector[3]);
@@ -66,7 +64,7 @@ string keyboardHandler::processLogin(vector<string> &userInputVector, UserData u
     return output;
 }
 
-string keyboardHandler::processJoin(vector<string> &userInputVector, UserData userData){
+string keyboardHandler::processJoin(vector<string> &userInputVector, userData userData){
     // add to actionLog
     string topic = userInputVector[1];
     string receiptId = to_string(userData.incrementAndGetReceiptCounter());
@@ -84,7 +82,7 @@ string keyboardHandler::processSubscribe(vector<string> &userInputVector) {
 
 }
 
-string keyboardHandler::processUnsbscribe(vector<string> &userInputVector) {
+string keyboardHandler::processUnsubscribe(vector<string> &userInputVector) {
 
 }
 
@@ -111,4 +109,4 @@ vector<string> keyboardHandler::parseInput(string lastUserInput) {
                            istream_iterator<string>());
     return results;
 };
-}
+
