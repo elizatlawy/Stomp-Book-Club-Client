@@ -52,12 +52,17 @@ public:
     void addToWishList(string bookName);
     void removeFromWishList(string bookName);
 
+    string getDisconnectReceiptId() const;
+
+    void setDisconnectReceiptId(string disconnectReceiptId);
+
 private:
     string userName;
     string userPassword;
     bool loggedIn;
     int subscriptionId;
     int receiptId;
+    string disconnectReceiptId;
     unordered_map<std::string,std::string> actionLog;
     unordered_map<std::string,std::vector<Book*>> inventory;
     vector<string> wishList; // vector of wished book names

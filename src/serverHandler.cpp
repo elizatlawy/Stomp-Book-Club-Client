@@ -32,7 +32,9 @@ void serverHandler::run() {
         else if(serverOutputMessage[0] == "RECEIPT"){
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
             // prints to the screen
-            // TODO: CHECK HOW TO logout
+            // if it is the answer of the disconnect message logout
+            if(receiptId == userData->getDisconnectReceiptId())
+                userData->logout();
             cout << userData->getOutputMessage(receiptId) << endl;
 
         }
@@ -68,6 +70,7 @@ void serverHandler::messageExecutor(string subscription, string topic, string ms
     } // end of wish
     // message type is {User} has {bookName}
     if (msgBody.find(" has ") != string::npos) {
+        bookName = msgBody.substr(msgBody.find_last_of(' ') + 1);
         // check if I wish to have this book
         vector<string> wishList = userData->getWishList();
         auto result =  std::find(std::begin(wishList), std::end(wishList), bookName);
@@ -78,19 +81,26 @@ void serverHandler::messageExecutor(string subscription, string topic, string ms
                          + string("Taking") + bookName + string("from") + senderName + '\n' + '\0';
             Book *borrowedBook = new Book(bookName,senderName, true);
             userData->addBook(topic,*borrowedBook);
+            userData->removeFromWishList(bookName);
+
             sendMessage(msg);
         }
     } // end of has
-    if (msgBody.find(" “Returning ") != string::npos) {
+    if (msgBody.find("Returning") != string::npos) {
         string toReturnName = msgBody.substr(msgBody.find_last_of(' ') + 1);
         // if the some want to return the book to me
         if(toReturnName == userData->getUserName()){
             bookName = msgBody.substr(msgBody.find(' ') + 1);
+            // but the book back to my inventory.
+            userData->changeBookAvailability(topic,bookName,true);
+            // TODO: check if need to return the book all the way to the starter
+    } // end of Returning
+        if (msgBody.find("book status") != string::npos) {
 
 
 
+        }
 
-    }
 
 
 

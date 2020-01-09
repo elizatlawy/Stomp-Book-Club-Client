@@ -8,7 +8,7 @@
 #include <algorithm>
 
 UserData::UserData()
-        : loggedIn(false), subscriptionId(0), receiptId(0), actionLog(), inventory(unordered_map<std::string, std::vector<Book*>>()) {}
+        : loggedIn(false), subscriptionId(0), receiptId(0),disconnectReceiptId("-1"), actionLog(), inventory(unordered_map<std::string, std::vector<Book*>>()) {}
 
 void UserData::logIn() {
     loggedIn = true;
@@ -86,3 +86,10 @@ void UserData::removeFromWishList(string bookName) {
     wishList.erase(std::remove(wishList.begin(), wishList.end(), bookName), wishList.end());
 }
 
+string UserData::getDisconnectReceiptId() const {
+    return disconnectReceiptId;
+}
+
+void UserData::setDisconnectReceiptId(string disconnectReceiptId) {
+    UserData::disconnectReceiptId = disconnectReceiptId;
+}
