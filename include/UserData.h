@@ -8,12 +8,15 @@
 #include <string>
 #include <iostream>
 #include <string>
+#include <unordered_map>
 
 using namespace std;
 
 
 class UserData {
 public:
+    UserData();
+
     const string &getUserName() const;
 
     const string &getUserPassword() const;
@@ -36,14 +39,17 @@ public:
 
     int incrementAndGetReceiptCounter();
 
+    void addToActionLog(string receiptId, string msg);
+    string getOutputMessage(string receiptId);
+
 private:
     string userName;
     string userPassword;
-    bool loggedIn = false;
+    bool loggedIn;
     string lastReceiptId;
-    int subscriptionId = 0;
-    int receiptId = 0;/
-
+    int subscriptionId;
+    int receiptId;
+    unordered_map<string,string> actionLog;
 
 };
 

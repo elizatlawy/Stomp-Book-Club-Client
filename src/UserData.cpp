@@ -4,6 +4,8 @@
 
 #include "UserData.h"
 
+UserData::UserData() : loggedIn(false), subscriptionId(0), receiptId(0), actionLog() {}
+
 void UserData::logIn() {
     loggedIn = true;
 }
@@ -43,3 +45,12 @@ int UserData::incrementAndGetSubscriptionCounter() {
     subscriptionId++;
     return subscriptionId;
 }
+
+void UserData::addToActionLog(string receiptId, string msg) {
+    actionLog.insert(receiptId,msg);
+}
+string UserData::getOutputMessage(string receiptId) {
+    return actionLog.at(receiptId);
+}
+
+
