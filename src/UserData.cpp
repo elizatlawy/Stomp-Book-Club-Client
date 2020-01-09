@@ -39,7 +39,7 @@ void UserData::setLastReceiptId(const string &receiptId) {
     UserData::lastReceiptId = receiptId;
 }
 
-int UserData::incrementAndGetMsgCounter() {
-    messageId++;
-    return messageId;
+int UserData::incrementAndGetSubscriptionCounter() {
+    subscriptionId++;
+    return subscriptionId;
 }

@@ -32,14 +32,17 @@ public:
 
     void setLastReceiptId(const string &receiptId);
 
-    int incrementAndGetMsgCounter();
+    int incrementAndGetSubscriptionCounter();
+
+    int incrementAndGetReceiptCounter();
 
 private:
     string userName;
     string userPassword;
     bool loggedIn = false;
     string lastReceiptId;
-    int messageId = 0;
+    int subscriptionId = 0;
+    int receiptId = 0;
 
 
 };

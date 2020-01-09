@@ -17,6 +17,7 @@ void keyboardHandler::run() {
     string lastUserInput;
     vector<string> userInputVector;
     UserData userData;
+    // while user not logged in, he cant to do any command besides login
     while (!userData.isLoggedIn()) {
         getline(cin, lastUserInput);
         userInputVector = parseInput(lastUserInput);
@@ -24,6 +25,7 @@ void keyboardHandler::run() {
             string loginMsg = decodeLogin(userInputVector, userData);
             sendMessage(loginMsg);
         }
+        // user is now logged in
         while (userData.isLoggedIn()) {
             getline(cin, lastUserInput);
             userInputVector = parseInput(lastUserInput);
@@ -60,13 +62,13 @@ string keyboardHandler::decodeLogin(vector<string> &userInputVector, UserData us
 
 }
 
-string keyboardHandler::decodeJoin(vector<string> &userInputVector) {
+string keyboardHandler::decodeJoin(vector<string> &userInputVector, UserData userData){
     string topic = userInputVector[1];
     string output = string("SUBSCRIBE") + ('\n')
                     + string("destination:") + topic + ('\n')
                     + string("id:") + ('\n')
-                    + string("receipt:") +
-
+                    + string("receipt:") + to_string(userData.incrementAndGetReceiptCounter()) + ('\n')
+                    + string("")
 }
 
 string keyboardHandler::decodeAdd(vector<string> &userInputVector) {
@@ -86,7 +88,9 @@ string keyboardHandler::decodeStatus(vector<string> &userInputVector) {
 
 }
 
-void keyboardHandler::sendMessage(string) {}
+void keyboardHandler::sendMessage(string msg) {
+    connectionHandler.sendLine(msg);
+}
 
 vector<string> keyboardHandler::parseInput(string lastUserInput) {
     std::istringstream iss(lastUserInput);
