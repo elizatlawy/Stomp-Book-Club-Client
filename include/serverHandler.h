@@ -12,13 +12,15 @@
 class serverHandler {
 public:
     serverHandler(ConnectionHandler &connectionHandler);
-    userData userData;
+
 
     void run();
 
 private:
     ConnectionHandler &connectionHandler;
+    UserData &userData;
     void messageExecutor( string subscription, string topic, string msgBody);
+    void sendMessage (string msg);
 
 
 

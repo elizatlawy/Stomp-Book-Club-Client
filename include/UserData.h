@@ -13,9 +13,9 @@
 using namespace std;
 
 
-class userData {
+class UserData {
 public:
-    userData();
+    UserData();
 
     const string &getUserName() const;
 

@@ -20,8 +20,8 @@ public:
 
 private:
     ConnectionHandler &connectionHandler;
-    string processLogin (vector<string> &userInputVector, userData userData);
-    string processJoin (vector<string> &userInputVector, userData userData);
+    string processLogin (vector<string> &userInputVector, UserData userData);
+    string processJoin (vector<string> &userInputVector, UserData userData);
     string processSubscribe (vector<string> &userInputVector);
     string processUnsbscribe (vector<string> &userInputVector);
     string processBorrow (vector<string> &userInputVector);

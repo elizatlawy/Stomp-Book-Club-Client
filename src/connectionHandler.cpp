@@ -111,16 +111,16 @@ void ConnectionHandler::close() {
     }
 }
 
-void ConnectionHandler::setUserData(userData &userData) {
-    ConnectionHandler::userData = userData;
-}
+
 bool ConnectionHandler::isConnected() {
     return connected;
 }
 
- userData &ConnectionHandler::getUserData()  {
+ UserData &ConnectionHandler::getUserData()  {
     return userData;
 }
+
+
 
 
 

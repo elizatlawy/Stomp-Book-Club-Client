@@ -16,7 +16,7 @@ void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
     vector<string> userInputVector;
-    userData userData(nullptr);
+    UserData userData(nullptr);
     // while user not logged in, he cant to do any command besides login
     while (!userData.isLoggedIn()) {
         getline(cin, lastUserInput);
@@ -53,7 +53,7 @@ void keyboardHandler::run() {
     }
 }
 
-string keyboardHandler::processLogin(vector<string> &userInputVector, userData userData ) {
+string keyboardHandler::processLogin(vector<string> &userInputVector, UserData userData ) {
     // set userName and password
     userData.setUserName(userInputVector[2]);
     userData.setUserPassword(userInputVector[3]);
@@ -66,7 +66,7 @@ string keyboardHandler::processLogin(vector<string> &userInputVector, userData u
     return output;
 }
 
-string keyboardHandler::processJoin(vector<string> &userInputVector, userData userData){
+string keyboardHandler::processJoin(vector<string> &userInputVector, UserData userData){
     // add to actionLog
     string topic = userInputVector[1];
     string receiptId = to_string(userData.incrementAndGetReceiptCounter());
