@@ -42,7 +42,7 @@ private:
     bool loggedIn = false;
     string lastReceiptId;
     int subscriptionId = 0;
-    int receiptId = 0;
+    int receiptId = 0;/
 
 
 };
