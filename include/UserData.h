@@ -43,11 +43,11 @@ public:
 
     string getOutputMessage(string receiptId);
 
-    void addBook (string topic, string book);
+    void addBook (string topic, Book& book);
 
-    string removeBook (string topic, string book);
+    string removeBook (string topic, Book& book);
 
-    bool isAvailableBook (string topic, string book);
+    bool isAvailableBook (string topic, Book& book);
 
 private:
     string userName;
@@ -56,7 +56,7 @@ private:
     int subscriptionId;
     int receiptId;
     unordered_map<std::string,std::string> actionLog;
-    unordered_map<std::string,std::vector<string>> inventory;
+    unordered_map<std::string,std::vector<Book*>> inventory;
 };
 
 

@@ -3,10 +3,11 @@
 //
 
 #include <vector>
+#include <include/Book.h>
 #include "UserData.h"
 
 UserData::UserData()
-        : loggedIn(false), subscriptionId(0), receiptId(0), actionLog(), inventory(unordered_map<std::string, std::vector<string>>()) {}
+        : loggedIn(false), subscriptionId(0), receiptId(0), actionLog(), inventory(unordered_map<std::string, std::vector<Book*>>()) {}
 
 void UserData::logIn() {
     loggedIn = true;
@@ -46,20 +47,20 @@ string UserData::getOutputMessage(string receiptId) {
     return actionLog.at(receiptId);
 }
 
-void UserData::addBook(string topic, string book) {
+void UserData::addBook(string topic, Book& book) {
     // topic is not found in inventory
     if (inventory.find(topic) == inventory.end()) {
-        inventory.insert(make_pair(topic, vector<string>()));
+        inventory.insert(make_pair(topic, vector<Book*>()));
     }
     // topic is exist
 
 }
 
-string UserData::removeBook(string topic, string book) {
+string UserData::removeBook(string topic, Book& book) {
 
 }
 
-bool UserData::isAvailableBook(string topic, string book) {
+bool UserData::isAvailableBook(string topic, Book& book) {
 
 }
 
