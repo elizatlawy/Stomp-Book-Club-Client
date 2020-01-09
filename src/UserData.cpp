@@ -44,11 +44,18 @@ int UserData::incrementAndGetSubscriptionCounter() {
     subscriptionId++;
     return subscriptionId;
 }
-void UserData::addToActionLog(string receiptId, string msg) {
-    actionLog.insert(make_pair(receiptId,msg));
+void UserData::addToActionLog(string receiptId,string command, string msg) {
+    // TODO: check if need "new"
+    vector<string> vec =  {command,msg};
+    actionLog.insert(make_pair(receiptId,vec));
 }
 string UserData::getOutputMessage(string receiptId) {
-    return actionLog.at(receiptId);
+    vector<string> vec = actionLog.at(receiptId);
+    return vec.at(0);
+}
+string UserData::getCommandType(string receiptId) {
+    vector<string> vec = actionLog.at(receiptId);
+    return vec.at(1);
 }
 
 void UserData::addBook(string topic, Book& book) {
@@ -75,6 +82,17 @@ void UserData::changeBookAvailability(string topic, const string& requestedBookN
         if (currBook->getBookName() == requestedBookName)
             currBook->setAvailable(status);
     }
+}
+string UserData::listOfAvailableBooksByTopic(string topic) {
+    string output = "";
+    string separator;
+    vector<Book *> listOfBooks = inventory.at(topic);
+    for (Book *currBook : listOfBooks){
+        if(currBook->isAvailable())
+            output = currBook->getBookName() + ",";
+            separator = ", ";
+    }
+    return output;
 }
 
 const vector<string> &UserData::getWishList() const {
@@ -103,6 +121,8 @@ vector<string> UserData::parseInput(string lastUserInput) {
     vector<string> results(istream_iterator<string>{iss},
                            istream_iterator<string>());
     return results;
-};
+}
+
+
 
 

@@ -21,6 +21,8 @@ private:
     UserData *userData;
     void messageExecutor( string subscription, string topic, string msgBody);
     void sendMessage (string msg);
+    vector<string> parseOutput(string lastUserInput);
+    void wishExecutor(string);
 
 
 

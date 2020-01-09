@@ -4,21 +4,30 @@
 
 
 #include <iostream>
+#include <vector>
+#include <sstream>
 
 
 using namespace std;
 
 int main(int argc, char **argv) {
 
-    string test = "1.1.1.1:2000";
-    string host = test.substr(0, test.find(':'));
-    string port = test.substr(test.find(':')+1, test.size());
-
-    cout << "host: " + host << endl;
-    cout << "port: " + port << endl;
+    string msg = string("SEND") + '\n'
+                 + string("destination:") + "1234" + '\n'
+                 + ("user") + (":") + "bookList" + '\n' + '\0';
+    std::stringstream ss(msg);
+    std::string line;
+    vector<string> results;
+    while(std::getline(ss,line,'\n')){
+        results.push_back(line);
+    }
+    for(string currStr: results){
+        cout << currStr << endl;
 
 
 }
 
 
 
+
+}
