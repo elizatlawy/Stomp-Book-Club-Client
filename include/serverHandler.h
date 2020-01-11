@@ -19,10 +19,18 @@ public:
 private:
     ConnectionHandler *connectionHandler;
     UserData *userData;
-    void messageExecutor( string subscription, string topic, string msgBody);
+    void messageExecutor(string topic, string msgBody);
     void sendMessage (string msg);
-    vector<string> parseOutput(string lastUserInput);
-    void wishExecutor(string);
+    vector<string> parseByLine(string message);
+    vector<string> parseBySpace(string message);
+    void wishBookExecutor(string topic, string msgBody);
+    void hasBookExecutor(string topic, string msgBody);
+    void takeBookExecutor(string topic, string msgBody);
+    void returnBookExecutor(string topic, string msgBody);
+    void bookStatusExecutor(string topic);
+
+
+
 
 
 

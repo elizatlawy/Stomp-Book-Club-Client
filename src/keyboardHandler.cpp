@@ -20,7 +20,7 @@ void keyboardHandler::operator()() {
     while (flag) {
         while (!userData->isLoggedIn()) {
             getline(cin, lastUserInput);
-            userInputVector = parseInput(lastUserInput);
+            userInputVector = parseBySpace(lastUserInput);
             if (userInputVector[0] == "login") {
                 string loginMsg = processLogin(userInputVector);
                 if (loginMsg != "failToConnect")
@@ -31,7 +31,7 @@ void keyboardHandler::operator()() {
             // user is now logged in
             while (userData->isLoggedIn()) {
                 getline(cin, lastUserInput);
-                userInputVector = parseInput(lastUserInput);
+                userInputVector = parseBySpace(lastUserInput);
                 if (userInputVector[0] == "join") {
                     string joinMsg = processJoin(userInputVector);
                     sendMessage(joinMsg);
@@ -181,7 +181,7 @@ void keyboardHandler::sendMessage(string msg) {
     connectionHandler->sendLine(msg);
 }
 
-vector<string> keyboardHandler::parseInput(string lastUserInput) {
+vector<string> keyboardHandler::parseBySpace(string lastUserInput) {
     std::istringstream iss(lastUserInput);
     vector<string> results(istream_iterator<string>{iss},
                            istream_iterator<string>());

@@ -30,7 +30,7 @@ private:
     string processStatus (vector<string> &userInputVector);
     string processLogOut();
     void sendMessage (string msg);
-    vector<string> parseInput ( string lastUserInput);
+    vector<string> parseBySpace (string lastUserInput);
 
 
 
