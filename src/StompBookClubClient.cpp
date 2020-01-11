@@ -5,11 +5,14 @@
 
 using namespace std;
 
-int main (int argc, char *argv[]) {
+int main () {
 
 keyboardHandler *keyboardHandler_ = new keyboardHandler;
-thread t1(ref(keyboardHandler_));
+thread th1(ref(keyboardHandler_));
 // TODO : check if need to delete keyboardHandler
+th1.join();
+
+return 0;
 }
 
 

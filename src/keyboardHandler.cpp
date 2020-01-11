@@ -70,7 +70,7 @@ string keyboardHandler::processLogin(vector<string> &userInputVector) {
     }
     // create serverHandler thread
     serverHandler *server_Handler = new serverHandler(*connectionHandler, *userData);
-    thread t2(std::ref(server_Handler));
+    thread th2(std::ref(server_Handler));
     // set userName and password
     userData->setUserName(userInputVector[2]);
     userData->setUserPassword(userInputVector[3]);

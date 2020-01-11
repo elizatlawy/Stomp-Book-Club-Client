@@ -81,7 +81,7 @@ string UserData::listOfAvailableBooksByTopic(string topic) {
     vector<Book *> listOfBooks = inventory.at(topic);
     for (Book *currBook : listOfBooks){
         if(currBook->isAvailable())
-            output = currBook->getBookName() + ",";
+            output = output + currBook->getBookName() + ",";
             separator = ", ";
     }
     return output;
