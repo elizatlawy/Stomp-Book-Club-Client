@@ -1,6 +1,3 @@
-//
-// Created by zatlawy@wincs.cs.bgu.ac.il on 08/01/2020.
-//
 
 #ifndef BOOST_ECHO_CLIENT_KEYBOARDHANDLER_H
 #define BOOST_ECHO_CLIENT_KEYBOARDHANDLER_H
@@ -18,7 +15,7 @@ using namespace std;
 
 class keyboardHandler {
 public:
-    keyboardHandler(mutex & _mutex);
+    keyboardHandler();
 
     void run();
 
@@ -27,7 +24,6 @@ private:
     ConnectionHandler *connectionHandler;
     thread *serverHandlerThread;
     UserData *userData;
-    mutex & _mutex;
     std::condition_variable cv;
     bool establishConnection (vector<string> &userInputVector);
     string processLogin (vector<string> &userInputVector );

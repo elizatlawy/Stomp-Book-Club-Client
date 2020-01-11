@@ -9,7 +9,7 @@
 
 using namespace std;
 
-keyboardHandler::keyboardHandler(mutex & _mutex) : _mutex(_mutex){}
+keyboardHandler::keyboardHandler(){}
 
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
@@ -29,7 +29,7 @@ void keyboardHandler::run() {
 //                    unique_lock<std::mutex> lk(_mutex);
 //                    cv.wait(lk, [this]{return userData->isLoginLock();});
                         // TODO: FIX IT
-                    while(!userData->isLoggedIn())
+                    while(!userData->isLoggedIn()){}
 
                 } else
                     cout << "Could not connect to the server" << endl;
@@ -40,7 +40,6 @@ void keyboardHandler::run() {
         // user is now logged in
         while (userData->isLoggedIn()) {
             string lastUserInput;
-            cout << "entered the logged in while" << endl;
             getline(cin, lastUserInput);
             userInputVector = parseBySpace(lastUserInput);
             if (userInputVector[0] == "login") {
@@ -126,7 +125,7 @@ string keyboardHandler::processAdd(vector<string> &userInputVector) {
     Book *currBook = new Book(bookName, userName, true);
     userData->addBook(topic, *currBook);
     // decode msg
-    string msgBody = userName + " has added the book Foundation";
+    string msgBody = userName + " has added the book " + bookName;
     string output = string("SEND") + '\n'
                     + string("destination:") + topic + '\n' + '\n'
                     + msgBody + '\n' + '\0';

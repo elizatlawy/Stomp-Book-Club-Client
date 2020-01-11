@@ -6,21 +6,27 @@
 //#include <iostream>
 //#include <vector>
 //#include <sstream>
-//
+//#include "unordered_map"
 //
 //using namespace std;
 //
 //int main(int argc, char **argv) {
-//
-//
-//    string output = "";
-//    string separator;
-//    vector<string> listOfBooks = {"Harry Potter", "Shooter", "Friends"};
-//    for (string currBook : listOfBooks) {
-//        output = output + separator + currBook;
-//        separator = ", ";
+//    unordered_map<string,vector<string*>> inventory = unordered_map<string,vector<string*>>();
+//    string topic = "topic";
+//    if (inventory.count(topic) == 0) {
+//        inventory[topic] = vector<string*>();
 //    }
-//    cout << output << endl;
+//    // topic is exist
+//    string book = "book";
+//    vector<string*> listOfBooks = inventory.at(topic);
+//    listOfBooks.push_back(&book);
+//    cout << "test" << endl;
+//
+//
+//
+//
+//
+//
 //}
 //
 

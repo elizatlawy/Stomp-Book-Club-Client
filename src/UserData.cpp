@@ -4,6 +4,7 @@
 #include "UserData.h"
 # include <algorithm>
 
+
 UserData::UserData()
         : loggedIn(false), subscriptionId(0), receiptId(0),disconnectReceiptId("-1"), actionLog(), inventory(), wishList() {}
 
@@ -59,8 +60,8 @@ void UserData::addBook(string topic, Book& book) {
         inventory.insert(make_pair(topic, vector<Book*>()));
     }
     // topic is exist
-    vector<Book*> listOfBooks = inventory.at(topic);
-    listOfBooks.push_back(&book);
+    vector<Book*> *listOfBooks = &inventory.at(topic);
+    listOfBooks->push_back(&book);
 }
 
 bool UserData::isAvailableBook(string topic, const string& requestedBookName) {

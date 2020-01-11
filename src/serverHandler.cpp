@@ -128,6 +128,7 @@ void serverHandler::returnBookExecutor(string topic, string msgBody) {
 
 void serverHandler::bookStatusExecutor(string topic) {
     string bookList = userData->listOfAvailableBooksByTopic(topic);
+    cout << bookList << endl;
     // send the message
     string msg = string("SEND") + '\n'
                  + string("destination:") + topic + '\n' + '\n'
