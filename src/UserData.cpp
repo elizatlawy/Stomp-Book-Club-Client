@@ -1,6 +1,3 @@
-//
-// Created by zatlawy@wincs.cs.bgu.ac.il on 08/01/2020.
-//
 
 #include <vector>
 #include "Book.h"
@@ -38,9 +35,13 @@ void UserData::setUserPassword(const string &password) {
 }
 
 int UserData::incrementAndGetSubscriptionCounter() {
-    subscriptionId++;
-    return subscriptionId;
+    return subscriptionId++;
 }
+
+int UserData::incrementAndGetReceiptCounter() {
+    return receiptId++;
+}
+
 void UserData::addToActionLog(string receipt, string msg) {
     actionLog.insert(make_pair(receipt, msg));
 }
