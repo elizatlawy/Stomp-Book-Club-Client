@@ -38,7 +38,6 @@ void serverHandler::operator()() {
 
         } else if (serverOutputMessage[0] == "ERROR") {
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-            userData->setLastReceiptId(receiptId);
             string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') + 1);
             cout << errorMessage << endl;
         } else if (serverOutputMessage[0] == "MESSAGE") {
@@ -65,7 +64,7 @@ void serverHandler::messageExecutor(string subscription, string topic, string ms
             sendMessage(msg);
         }
     } // end of wish
-    // message type is {User} has {bookName}
+    // message type is {User} has {bookName} or  {User} has added the book
     if (msgBody.find(" has ") != string::npos) {
         bookName = msgBody.substr(msgBody.find_last_of(' ') + 1);
         // check if I wish to have this book
@@ -79,10 +78,14 @@ void serverHandler::messageExecutor(string subscription, string topic, string ms
             Book *borrowedBook = new Book(bookName, senderName, true);
             userData->addBook(topic, *borrowedBook);
             userData->removeFromWishList(bookName);
-
             sendMessage(msg);
         }
     } // end of has
+    if (msgBody.find(" Taking ") != string::npos) {
+
+
+    }
+
     if (msgBody.find("Returning") != string::npos) {
         string toReturnName = msgBody.substr(msgBody.find_last_of(' ') + 1);
         // if the some want to return the book to me
