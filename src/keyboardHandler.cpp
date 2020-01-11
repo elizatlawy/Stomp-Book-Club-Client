@@ -11,7 +11,7 @@ using namespace std;
 
 keyboardHandler::keyboardHandler() : userData() {}
 
-void keyboardHandler::operator()() {
+void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
     vector<string> userInputVector;
@@ -69,8 +69,8 @@ string keyboardHandler::processLogin(vector<string> &userInputVector) {
         return "failToConnect";
     }
     // create serverHandler thread
-    serverHandler *server_Handler = new serverHandler(*connectionHandler, *userData);
-    thread th2(std::ref(server_Handler));
+    serverHandler serverHandler_ =  serverHandler(*connectionHandler, *userData);
+    thread th2(&serverHandler::run, &serverHandler_);
     // set userName and password
     userData->setUserName(userInputVector[2]);
     userData->setUserPassword(userInputVector[3]);

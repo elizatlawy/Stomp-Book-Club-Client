@@ -16,7 +16,7 @@ class keyboardHandler {
 public:
     keyboardHandler();
 
-    void operator()();
+    void run();
 
 private:
     ConnectionHandler *connectionHandler;

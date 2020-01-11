@@ -16,7 +16,7 @@ using namespace std;
 serverHandler::serverHandler(ConnectionHandler &connectionHandler, UserData &userData) : connectionHandler(
         &connectionHandler), userData(&userData) {}
 
-void serverHandler::operator()() {
+void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         string message;
         connectionHandler->getLine(message);

@@ -5,7 +5,7 @@
 #ifndef BOOST_ECHO_CLIENT_SERVERHANDLER_H
 #define BOOST_ECHO_CLIENT_SERVERHANDLER_H
 
-#include "connectionHandler.h";
+#include "connectionHandler.h"
 
 
 
@@ -14,7 +14,7 @@ public:
     serverHandler(ConnectionHandler &connectionHandler, UserData &userData);
 
 
-    void operator()();
+    void run();
 
 private:
     ConnectionHandler *connectionHandler;
