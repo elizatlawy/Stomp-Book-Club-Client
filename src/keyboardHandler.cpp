@@ -25,6 +25,8 @@ void keyboardHandler::operator()() {
                 string loginMsg = processLogin(userInputVector);
                 if (loginMsg != "failToConnect")
                     sendMessage(loginMsg);
+                else
+                   cout << "Could not connect to the server" << endl;
             }
             // user is now logged in
             while (userData->isLoggedIn()) {
@@ -104,7 +106,7 @@ string keyboardHandler::processAdd(vector<string> &userInputVector) {
     string topic = userInputVector[1];
     string bookName = userInputVector[2];
     string userName = userData->getUserName();
-    Book *currBook = new Book(bookName, userName, false);
+    Book *currBook = new Book(bookName, userName, true);
     userData->addBook(topic, *currBook);
     // decode msg
     string msgBody = userName + " has added the book Foundation";
