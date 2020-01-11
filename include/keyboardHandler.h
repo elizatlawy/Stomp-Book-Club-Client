@@ -7,7 +7,9 @@
 
 #include <string>
 #include <vector>
+#include <thread>
 #include "connectionHandler.h"
+#include "serverHandler.h"
 
 using namespace std;
 
@@ -21,7 +23,9 @@ public:
 private:
     // TODO:: make both connectionHandler & userData
     ConnectionHandler *connectionHandler;
+    thread *serverHandlerThread;
     UserData *userData;
+    bool establishConnection (vector<string> &userInputVector);
     string processLogin (vector<string> &userInputVector );
     string processJoin (vector<string> &userInputVector);
     string processAdd (vector<string> &userInputVector);

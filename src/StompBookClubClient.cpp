@@ -5,13 +5,12 @@
 
 using namespace std;
 
-int main () {
+int main() {
 
-keyboardHandler keyboardHandler_ =  keyboardHandler();
-thread th1(&keyboardHandler::run, &keyboardHandler_);
-th1.join();
+    keyboardHandler keyboardHandler_ =  keyboardHandler();
+    keyboardHandler_.run();
 
-return 0;
+    return 0;
 }
 
 

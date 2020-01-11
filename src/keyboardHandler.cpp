@@ -15,7 +15,7 @@ void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
     vector<string> userInputVector;
-    userData = new UserData();
+    userData = new UserData;
     // while user not logged in, he cant to do any command besides login
     bool flag = true;
     while (flag) {
@@ -23,17 +23,20 @@ void keyboardHandler::run() {
             getline(cin, lastUserInput);
             userInputVector = parseBySpace(lastUserInput);
             if (userInputVector[0] == "login") {
-                string loginMsg = processLogin(userInputVector);
-                if (loginMsg != "failToConnect")
+                if (establishConnection(userInputVector)) {
+                    string loginMsg = processLogin(userInputVector);
                     sendMessage(loginMsg);
-                else
-                   cout << "Could not connect to the server" << endl;
+                } else
+                    cout << "Could not connect to the server" << endl;
             }
             // user is now logged in
             while (userData->isLoggedIn()) {
                 getline(cin, lastUserInput);
                 userInputVector = parseBySpace(lastUserInput);
-                if (userInputVector[0] == "join") {
+                if (userInputVector[0] == "login") {
+                    string loginMsg = processLogin(userInputVector);
+                    sendMessage(loginMsg);
+                } else if (userInputVector[0] == "join") {
                     string joinMsg = processJoin(userInputVector);
                     sendMessage(joinMsg);
                 } else if (userInputVector[0] == "add") {
@@ -57,21 +60,26 @@ void keyboardHandler::run() {
                 }
             }
         }
+        serverHandlerThread->join();
     }
 }
 
-string keyboardHandler::processLogin(vector<string> &userInputVector) {
+bool keyboardHandler::establishConnection(vector<string> &userInputVector) {
     // create Connection Handler
     string input = userInputVector[1];
     string host = input.substr(0, input.find(':'));
     int port = stoi(input.substr(input.find(':') + 1, input.size()));
     connectionHandler = new ConnectionHandler(host, short(port));
     if (!connectionHandler->connect()) {
-        return "failToConnect";
+        // create serverHandler thread
+        serverHandler *serverHandler_ = new serverHandler(*connectionHandler, *userData);
+        serverHandlerThread = new thread(&serverHandler::run, *serverHandler_);
+        return true;
     }
-    // create serverHandler thread
-    serverHandler serverHandler_ =  serverHandler(*connectionHandler, *userData);
-    thread th2(&serverHandler::run, &serverHandler_);
+    return false;
+}
+
+string keyboardHandler::processLogin(vector<string> &userInputVector) {
     // set userName and password
     userData->setUserName(userInputVector[2]);
     userData->setUserPassword(userInputVector[3]);
@@ -84,15 +92,12 @@ string keyboardHandler::processLogin(vector<string> &userInputVector) {
     return output;
 }
 
-
-
-
 string keyboardHandler::processJoin(vector<string> &userInputVector) {
     // add to actionLog
     string topic = userInputVector[1];
     string receiptId = to_string(userData->incrementAndGetReceiptCounter());
     string msg = "Joined club " + topic;
-    userData->addToActionLog(receiptId,msg);
+    userData->addToActionLog(receiptId, msg);
     // decode msg
     string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
     string output = string("SUBSCRIBE") + '\n'
@@ -122,7 +127,7 @@ string keyboardHandler::processExit(vector<string> &userInputVector) {
     string topic = userInputVector[1];
     string receiptId = to_string(userData->incrementAndGetReceiptCounter());
     string msg = "Exited club " + topic;
-    userData->addToActionLog(receiptId,msg);
+    userData->addToActionLog(receiptId, msg);
     // decode msg
     string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
     string output = string("UNSUBSCRIBE") + '\n'

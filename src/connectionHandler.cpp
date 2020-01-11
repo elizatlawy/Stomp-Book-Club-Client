@@ -22,17 +22,15 @@ bool ConnectionHandler::connect() {
 		tcp::endpoint endpoint(boost::asio::ip::address::from_string(host_), port_); // the server endpoint
 		boost::system::error_code error;
 		socket_.connect(endpoint, error);
-		if (error){
-            std::cout << " error form system" << std::endl;
-            throw boost::system::system_error(error);
+		if (error)
+			throw boost::system::system_error(error);
 
-        }
-		connected = true;
     }
     catch (std::exception& e) {
         std::cerr << "Connection failed (Error: " << e.what() << ')' << std::endl;
         return false;
     }
+    connected = true;
     return true;
 }
  

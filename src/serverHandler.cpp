@@ -2,14 +2,15 @@
 // Created by zatlawy@wincs.cs.bgu.ac.il on 08/01/2020.
 //
 
-#include <include/serverHandler.h>
+
 #include <string>
 #include <iostream>
 #include <vector>
-#include <sstream>
 #include <iterator>
 #include <include/Book.h>
 #include "serverHandler.h"
+
+
 
 using namespace std;
 
@@ -46,8 +47,6 @@ void serverHandler::run() {
             messageExecutor(topic, msgBody);
         }
     }
-
-
 }
 
 void serverHandler::messageExecutor(string topic, string msgBody) {
