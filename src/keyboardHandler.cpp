@@ -89,7 +89,7 @@ string keyboardHandler::processJoin(vector<string> &userInputVector) {
     string topic = userInputVector[1];
     string receiptId = to_string(userData->incrementAndGetReceiptCounter());
     string msg = "Joined club " + topic;
-    userData->addToActionLog(receiptId,"SUBSCRIBE",msg);
+    userData->addToActionLog(receiptId,msg);
     // decode msg
     string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
     string output = string("SUBSCRIBE") + '\n'
@@ -119,7 +119,7 @@ string keyboardHandler::processExit(vector<string> &userInputVector) {
     string topic = userInputVector[1];
     string receiptId = to_string(userData->incrementAndGetReceiptCounter());
     string msg = "Exited club " + topic;
-    userData->addToActionLog(receiptId,"UNSUBSCRIBE", msg);
+    userData->addToActionLog(receiptId,msg);
     // decode msg
     string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
     string output = string("UNSUBSCRIBE") + '\n'
