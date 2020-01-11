@@ -44,19 +44,13 @@ int UserData::incrementAndGetSubscriptionCounter() {
     subscriptionId++;
     return subscriptionId;
 }
-void UserData::addToActionLog(string receiptId,string command, string msg) {
-    // TODO: check if need "new"
-    vector<string> vec =  {command,msg};
-    actionLog.insert(make_pair(receiptId,vec));
+void UserData::addToActionLog(string receipt, string msg) {
+    actionLog.insert(make_pair(receipt, msg));
 }
-string UserData::getOutputMessage(string receiptId) {
-    vector<string> vec = actionLog.at(receiptId);
-    return vec.at(0);
+string UserData::getOutputMessage(string receipt) {
+    return actionLog.at(receipt);
 }
-string UserData::getCommandType(string receiptId) {
-    vector<string> vec = actionLog.at(receiptId);
-    return vec.at(1);
-}
+
 
 void UserData::addBook(string topic, Book& book) {
     // topic is not found in inventory
@@ -122,6 +116,7 @@ vector<string> UserData::parseInput(string lastUserInput) {
                            istream_iterator<string>());
     return results;
 }
+
 
 
 

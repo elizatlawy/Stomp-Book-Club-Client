@@ -30,12 +30,14 @@ void serverHandler::run() {
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
             // prints to the screen
             // if it is the answer of the disconnect message logout
-            if (receiptId == userData->getDisconnectReceiptId())
+            if (receiptId == userData->getDisconnectReceiptId()){
                 userData->logout();
-            if(userData->getCommandType(receiptId) == "SUBSCRIBE"){
-                // todo add the subscription to map
+                // TODO: check if needed
+                connectionHandler->close();
             }
-            cout << userData->getOutputMessage(receiptId) << endl;
+            else{
+                cout << userData->getOutputMessage(receiptId) << endl;
+            }
 
         } else if (serverOutputMessage[0] == "ERROR") {
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
@@ -95,12 +97,11 @@ void serverHandler::messageExecutor(string subscription, string topic, string ms
         } // end of Returning
         if (msgBody.find("book status") != string::npos) {
             string bookList = userData->listOfAvailableBooksByTopic(topic);
-            // if the list is not empty
-            if (bookList != "") {
-                string msg = string("SEND") + '\n'
-                             + string("destination:") + topic + '\n'
-                             + userData->getUserName() + (":") + bookList + '\n' + '\0';
-            }
+            // send the message
+            string msg = string("SEND") + '\n'
+                         + string("destination:") + topic + '\n'
+                         + userData->getUserName() + (":") + bookList + '\n' + '\0';
+
         } // end of book status
 
 
@@ -108,17 +109,17 @@ void serverHandler::messageExecutor(string subscription, string topic, string ms
 }
 
 
-    void serverHandler::sendMessage(string msg) {
-        connectionHandler->sendLine(msg);
-    }
+void serverHandler::sendMessage(string msg) {
+    connectionHandler->sendLine(msg);
+}
 
 vector<string> serverHandler::parseOutput(string lastUserInput) {
     std::stringstream ss(lastUserInput);
     std::string line;
     vector<string> results;
-        while(std::getline(ss,line,'\n')){
-            results.push_back(line);
-        }
+    while (std::getline(ss, line, '\n')) {
+        results.push_back(line);
+    }
     return results;
 }
 

@@ -39,11 +39,9 @@ public:
 
     int incrementAndGetReceiptCounter();
 
-    void addToActionLog(string receiptId,string command, string msg);
+    void addToActionLog(string receiptId,string msg);
 
     string getOutputMessage(string receiptId);
-    string getCommandType(string receiptId);
-
 
     void addBook (string topic, Book& book);
 
@@ -69,10 +67,9 @@ private:
     int subscriptionId;
     int receiptId;
     string disconnectReceiptId;
-    unordered_map<std::string,std::vector<string>> actionLog;
-    unordered_map<std::string,std::vector<Book*>> inventory;
+    unordered_map<string,string> actionLog; // key: receiptID value:  message to print
+    unordered_map<string,vector<Book*>> inventory;
     vector<string> wishList; // vector of wished book names
-
 };
 
 
