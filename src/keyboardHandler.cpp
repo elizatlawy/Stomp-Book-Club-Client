@@ -9,12 +9,13 @@
 
 using namespace std;
 
-keyboardHandler::keyboardHandler() : userData() {}
+keyboardHandler::keyboardHandler() {}
 
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
     string lastUserInput;
     vector<string> userInputVector;
+    userData = new UserData();
     // while user not logged in, he cant to do any command besides login
     bool flag = true;
     while (flag) {
@@ -111,7 +112,7 @@ string keyboardHandler::processAdd(vector<string> &userInputVector) {
     // decode msg
     string msgBody = userName + " has added the book Foundation";
     string output = string("SEND") + '\n'
-                    + string("destination:") + topic + '\n'
+                    + string("destination:") + topic + '\n' + '\n'
                     + msgBody + '\n' + '\0';
     return output;
 }
@@ -139,7 +140,7 @@ string keyboardHandler::processBorrow(vector<string> &userInputVector) {
     string userName = userData->getUserName();
     string msgBody = userName + " wish to borrow " + bookName;
     string output = string("SEND") + '\n'
-                    + string("destination:") + topic + '\n'
+                    + string("destination:") + topic + '\n' + '\n'
                     + msgBody + '\n' + '\0';
     return output;
 
@@ -152,7 +153,7 @@ string keyboardHandler::processReturn(vector<string> &userInputVector) {
     string userName = userData->getUserName();
     string msgBody = "Returning " + bookName + " to " + userName;
     string output = string("SEND") + '\n'
-                    + string("destination:") + topic + '\n'
+                    + string("destination:") + topic + '\n' + '\n'
                     + msgBody + '\n' + '\0';
     return output;
 
@@ -163,7 +164,7 @@ string keyboardHandler::processStatus(vector<string> &userInputVector) {
     string topic = userInputVector[1];
     string msgBody = "book status";
     string output = string("SEND") + '\n'
-                    + string("destination:") + topic + '\n'
+                    + string("destination:") + topic + '\n' + '\n'
                     + msgBody + '\n' + '\0';
     return output;
 }

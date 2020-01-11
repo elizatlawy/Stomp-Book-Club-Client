@@ -5,7 +5,7 @@
 # include <algorithm>
 
 UserData::UserData()
-        : loggedIn(false), subscriptionId(0), receiptId(0),disconnectReceiptId("-1"), actionLog(), inventory(unordered_map<std::string, std::vector<Book*>>()) {}
+        : loggedIn(false), subscriptionId(0), receiptId(0),disconnectReceiptId("-1"), actionLog(), inventory(), wishList() {}
 
 void UserData::logIn() {
     loggedIn = true;
@@ -106,6 +106,8 @@ string UserData::getDisconnectReceiptId() const {
 void UserData::setDisconnectReceiptId(string disconnectReceiptId) {
     UserData::disconnectReceiptId = disconnectReceiptId;
 }
+
+UserData::~UserData() {}
 
 
 

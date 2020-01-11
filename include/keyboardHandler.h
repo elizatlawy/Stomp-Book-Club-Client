@@ -19,6 +19,7 @@ public:
     void run();
 
 private:
+    // TODO:: make both connectionHandler & userData
     ConnectionHandler *connectionHandler;
     UserData *userData;
     string processLogin (vector<string> &userInputVector );

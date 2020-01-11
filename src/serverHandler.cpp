@@ -40,9 +40,9 @@ void serverHandler::run() {
             string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') + 1);
             cout << errorMessage << endl;
         } else if (serverOutputMessage[0] == "MESSAGE") {
-            //string subscription = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
+            cout << "Client Received MESSAGE from Server" << endl;
             string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
-            string msgBody = serverOutputMessage[4].substr(serverOutputMessage[4].find(':') + 1);
+            string msgBody = serverOutputMessage[5].substr(serverOutputMessage[4].find(':') + 1);
             messageExecutor(topic, msgBody);
         }
     }
@@ -52,21 +52,31 @@ void serverHandler::run() {
 
 void serverHandler::messageExecutor(string topic, string msgBody) {
     // message type is wish to borrow
-    if (msgBody.find("wish to borrow") != string::npos)
+    if (msgBody.find("wish to borrow") != string::npos) {
+        cout << "Client STARTED process: wish to borrow " << endl;
         wishBookExecutor(topic, msgBody);
+        cout << "Client FINISHED process: wish to borrow " << endl;
+
+    }
 
         // message type is {User} has {bookName} or  {User} has added the book
-    else if (msgBody.find(" has ") != string::npos)
+    else if (msgBody.find(" has ") != string::npos) {
+        cout << "Client STARTED process: HAS " << endl;
         hasBookExecutor(topic, msgBody);
-
-    else if (msgBody.find(" Taking ") != string::npos)
+        cout << "Client FINISHED process: HAS " << endl;
+    } else if (msgBody.find(" Taking ") != string::npos) {
+        cout << "Client STARTED process: Taking " << endl;
         takeBookExecutor(topic, msgBody);
-
-    else if (msgBody.find("Returning") != string::npos)
+        cout << "Client FINISHED process: Taking " << endl;
+    } else if (msgBody.find("Returning") != string::npos) {
+        cout << "Client STARTED process: Returning " << endl;
         returnBookExecutor(topic, msgBody);
-
-    else if (msgBody.find("book status") != string::npos)
+        cout << "Client FINISHED process: Returning " << endl;
+    } else if (msgBody.find("book status") != string::npos){
+        cout << "Client STARTED process: book status " << endl;
         bookStatusExecutor(topic);
+        cout << "Client FINISHED process: book status " << endl;
+    }
         // TODO: delete this before submission
         // else this is the  book status of other users message
     else
@@ -78,7 +88,7 @@ void serverHandler::wishBookExecutor(string topic, string msgBody) {
     string bookName = msgBody.substr(msgBody.find_last_of(' ') + 1);
     if (userData->isAvailableBook(topic, bookName)) { // if the user have the requested Book
         string msg = string("SEND") + '\n'
-                     + string("destination:") + topic + '\n'
+                     + string("destination:") + topic + '\n' + '\n'
                      + userData->getUserName() + (" ") + string("has ") + bookName + '\n' + '\0';
         sendMessage(msg);
     }
@@ -92,7 +102,7 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
     if (result != std::end(wishList)) {// the book is found in the wishList
         string senderName = msgBody.substr(0, msgBody.find(' '));
         string msg = string("SEND") + '\n'
-                     + string("destination:") + topic + '\n'
+                     + string("destination:") + topic + '\n' + '\n'
                      + string("Taking") + bookName + string("from") + senderName + '\n' + '\0';
         Book *borrowedBook = new Book(bookName, senderName, true);
         userData->addBook(topic, *borrowedBook);
@@ -123,7 +133,7 @@ void serverHandler::bookStatusExecutor(string topic) {
     string bookList = userData->listOfAvailableBooksByTopic(topic);
     // send the message
     string msg = string("SEND") + '\n'
-                 + string("destination:") + topic + '\n'
+                 + string("destination:") + topic + '\n' + '\n'
                  + userData->getUserName() + (":") + bookList + '\n' + '\0';
     sendMessage(msg);
 }

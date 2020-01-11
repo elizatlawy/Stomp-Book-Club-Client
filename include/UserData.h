@@ -15,7 +15,9 @@ using namespace std;
 
 class UserData {
 public:
-    UserData();
+    UserData(); // constructor
+
+    virtual ~UserData();
 
     const string &getUserName() const;
 
