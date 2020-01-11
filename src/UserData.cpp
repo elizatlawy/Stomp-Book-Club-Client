@@ -120,6 +120,19 @@ void UserData::setLoginLock(bool loginLock) {
 
 UserData::~UserData() {}
 
+string UserData::getActiveSubscriptionId(string topic) {
+    return activeSubscription.at(topic);
+
+}
+
+void UserData::addActiveSubscription(string topic, string subscriptionId) {
+    activeSubscription.insert(make_pair(topic,subscriptionId));
+}
+
+void UserData::removeActiveSubscription(string topic) {
+    activeSubscription.erase(topic);
+}
+
 
 
 

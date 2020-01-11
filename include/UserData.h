@@ -45,6 +45,9 @@ public:
     bool isLoginLock() const;
 
     void setLoginLock(bool loginLock);
+    string getActiveSubscriptionId(string topic);
+    void addActiveSubscription(string topic, string subscriptionId);
+    void removeActiveSubscription(string topic);
 
 
 private:
@@ -58,6 +61,8 @@ private:
     unordered_map<string,string> actionLog;
     unordered_map<std::string,std::vector<Book*>> inventory;
     vector<string> wishList; // vector of wished book names
+    unordered_map<string,string> activeSubscription; // key: topic name value: subscriptionId
+
 };
 
 
