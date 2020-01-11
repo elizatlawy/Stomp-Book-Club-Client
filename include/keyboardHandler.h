@@ -36,6 +36,7 @@ private:
     string processLogOut();
     void sendMessage (string msg);
     vector<string> parseBySpace (string lastUserInput);
+    string createBookName (vector<string> &userInputVector);
 
 
 

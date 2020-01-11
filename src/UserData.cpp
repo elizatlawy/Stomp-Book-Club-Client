@@ -81,13 +81,13 @@ void UserData::changeBookAvailability(string topic, const string& requestedBookN
 }
 string UserData::listOfAvailableBooksByTopic(string topic) {
     string output = "";
-    string separator;
     vector<Book *> listOfBooks = inventory.at(topic);
     for (Book *currBook : listOfBooks){
-        if(currBook->isAvailable())
-            output = output + currBook->getBookName() + ",";
-            separator = ", ";
+        if(currBook->isAvailable()){
+            output = output + currBook->getBookName() + ", ";
+        }
     }
+    output = output.substr(0,output.length()-2);
     return output;
 }
 

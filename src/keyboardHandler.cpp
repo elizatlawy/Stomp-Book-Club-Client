@@ -120,7 +120,7 @@ string keyboardHandler::processJoin(vector<string> &userInputVector) {
 string keyboardHandler::processAdd(vector<string> &userInputVector) {
 // add to inventory
     string topic = userInputVector[1];
-    string bookName = userInputVector[2];
+    string bookName = createBookName(userInputVector);
     string userName = userData->getUserName();
     Book *currBook = new Book(bookName, userName, true);
     userData->addBook(topic, *currBook);
@@ -148,7 +148,7 @@ string keyboardHandler::processExit(vector<string> &userInputVector) {
 
 string keyboardHandler::processBorrow(vector<string> &userInputVector) {
     // add to user wish list
-    string bookName = userInputVector[2];
+    string bookName = createBookName(userInputVector);
     userData->addToWishList(bookName);
     // decode msg
     string topic = userInputVector[1];
@@ -164,7 +164,7 @@ string keyboardHandler::processBorrow(vector<string> &userInputVector) {
 string keyboardHandler::processReturn(vector<string> &userInputVector) {
     // decode msg
     string topic = userInputVector[1];
-    string bookName = userInputVector[2];
+    string bookName = createBookName(userInputVector);
     string userName = userData->getUserName();
     string msgBody = "Returning " + bookName + " to " + userName;
     string output = string("SEND") + '\n'
@@ -203,3 +203,13 @@ vector<string> keyboardHandler::parseBySpace(string lastUserInput) {
                            istream_iterator<string>());
     return results;
 };
+
+string keyboardHandler::createBookName(vector<string> &userInputVector) {
+    // todo fix
+    string bookName = "";
+    for (int i = 2 ; i < userInputVector.size() ; i++){
+        string bookName = bookName + userInputVector[i] + " ";
+    }
+    bookName.substr(0, bookName.length()-1);
+    return bookName;
+}

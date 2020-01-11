@@ -7,7 +7,6 @@
 #include "serverHandler.h"
 
 
-
 using namespace std;
 
 serverHandler::serverHandler(ConnectionHandler &connectionHandler, UserData &userData) : connectionHandler(
@@ -17,7 +16,7 @@ void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         string message;
         connectionHandler->getLine(message, '\0');
-        if(message != ""){
+        if (message != "") {
             vector<std::string> serverOutputMessage = parseByLine(message);
             if (serverOutputMessage[0] == "CONNECTED") {
                 userData->logIn();
@@ -35,12 +34,12 @@ void serverHandler::run() {
                 }
             } else if (serverOutputMessage[0] == "ERROR") {
                 string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-                string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':')-1);
+                string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
                 cout << errorMessage << endl;
             } else if (serverOutputMessage[0] == "MESSAGE") {
                 cout << "Client Received MESSAGE from Server" << endl;
                 string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
-                string msgBody = serverOutputMessage[5].substr(serverOutputMessage[4].find(':') + 1);
+                string msgBody = serverOutputMessage[5];
                 messageExecutor(topic, msgBody);
             }
         }
@@ -69,7 +68,7 @@ void serverHandler::messageExecutor(string topic, string msgBody) {
         cout << "Client STARTED process: Returning " << endl;
         returnBookExecutor(topic, msgBody);
         cout << "Client FINISHED process: Returning " << endl;
-    } else if (msgBody.find("book status") != string::npos){
+    } else if (msgBody.find("book status") != string::npos) {
         cout << "Client STARTED process: book status " << endl;
         bookStatusExecutor(topic);
         cout << "Client FINISHED process: book status " << endl;
@@ -107,7 +106,7 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
         sendMessage(msg);
     }
 }
-
+// TODO: handle the case of long book name with spaces
 void serverHandler::takeBookExecutor(string topic, string msgBody) {
     string toTakeFromName = msgBody.substr(msgBody.find_last_of(' ') + 1);
     if (toTakeFromName == userData->getUserName()) {
@@ -130,7 +129,6 @@ void serverHandler::returnBookExecutor(string topic, string msgBody) {
 
 void serverHandler::bookStatusExecutor(string topic) {
     string bookList = userData->listOfAvailableBooksByTopic(topic);
-    cout << bookList << endl;
     // send the message
     string msg = string("SEND") + '\n'
                  + string("destination:") + topic + '\n' + '\n'
