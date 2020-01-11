@@ -9,7 +9,7 @@ using std::endl;
 using std::string;
  
 ConnectionHandler::ConnectionHandler(string host, short port): host_(host), port_(port), io_service_(), socket_(io_service_), connected(
-        false), userData() {}
+        false) {}
     
 ConnectionHandler::~ConnectionHandler() {
     close();
@@ -116,9 +116,7 @@ bool ConnectionHandler::isConnected() {
     return connected;
 }
 
- UserData &ConnectionHandler::getUserData()  {
-    return *userData;
-}
+
 
 
 

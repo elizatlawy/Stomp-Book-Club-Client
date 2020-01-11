@@ -16,20 +16,21 @@ class keyboardHandler {
 public:
     keyboardHandler();
 
-    void run();
+    void operator()();
 
 private:
     ConnectionHandler *connectionHandler;
     UserData *userData;
     string processLogin (vector<string> &userInputVector );
     string processJoin (vector<string> &userInputVector);
-    string processSubscribe (vector<string> &userInputVector);
-    string processUnsubscribe (vector<string> &userInputVector);
+    string processAdd (vector<string> &userInputVector);
+    string processExit (vector<string> &userInputVector);
     string processBorrow (vector<string> &userInputVector);
     string processReturn(vector<string> &userInputVector);
     string processStatus (vector<string> &userInputVector);
     string processLogOut();
     void sendMessage (string msg);
+    vector<string> parseInput ( string lastUserInput);
 
 
 

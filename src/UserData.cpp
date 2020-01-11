@@ -6,9 +6,6 @@
 #include "Book.h"
 #include "UserData.h"
 # include <algorithm>
-#include <iterator>
-#include <sstream>
-
 
 UserData::UserData()
         : loggedIn(false), subscriptionId(0), receiptId(0),disconnectReceiptId("-1"), actionLog(), inventory(unordered_map<std::string, std::vector<Book*>>()) {}
@@ -109,13 +106,6 @@ void UserData::setDisconnectReceiptId(string disconnectReceiptId) {
     UserData::disconnectReceiptId = disconnectReceiptId;
 }
 
-
-vector<string> UserData::parseInput(string lastUserInput) {
-    std::istringstream iss(lastUserInput);
-    vector<string> results(istream_iterator<string>{iss},
-                           istream_iterator<string>());
-    return results;
-}
 
 
 

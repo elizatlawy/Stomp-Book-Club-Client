@@ -13,13 +13,10 @@
 
 using namespace std;
 
-serverHandler::serverHandler(ConnectionHandler &connectionHandler) : connectionHandler(&connectionHandler),
-                                                                     userData(&connectionHandler.getUserData()) {
+serverHandler::serverHandler(ConnectionHandler &connectionHandler, UserData &userData) : connectionHandler(&connectionHandler),userData(&userData){}
 
-}
-
-void serverHandler::run() {
-    while (connectionHandler->isConnected()) {
+void serverHandler::operator()() {
+    while (connectionHandler->isConnected()){
         string message;
         connectionHandler->getLine(message);
         vector<std::string> serverOutputMessage = parseOutput(message);

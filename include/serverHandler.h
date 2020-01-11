@@ -11,10 +11,10 @@
 
 class serverHandler {
 public:
-    serverHandler(ConnectionHandler &connectionHandler);
+    serverHandler(ConnectionHandler &connectionHandler, UserData &userData);
 
 
-    void run();
+    void operator()();
 
 private:
     ConnectionHandler *connectionHandler;
