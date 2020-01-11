@@ -18,51 +18,60 @@ void keyboardHandler::run() {
     // while user not logged in, he cant to do any command besides login
     bool flag = true;
     while (flag) {
-        string lastUserInput;
+
         while (!userData->isLoggedIn()) {
+            string lastUserInput;
             getline(cin, lastUserInput);
             userInputVector = parseBySpace(lastUserInput);
             if (userInputVector[0] == "login") {
                 if (establishConnection(userInputVector)) {
                     string loginMsg = processLogin(userInputVector);
                     sendMessage(loginMsg);
+                    while(!userData->isLoggedIn())
+                        cout << "Please wait for login..." << endl;
+
                 } else
                     cout << "Could not connect to the server" << endl;
             }
-            // user is now logged in
-            while (userData->isLoggedIn()) {
-                getline(cin, lastUserInput);
-                userInputVector = parseBySpace(lastUserInput);
-                if (userInputVector[0] == "login") {
-                    string loginMsg = processLogin(userInputVector);
-                    sendMessage(loginMsg);
-                } else if (userInputVector[0] == "join") {
-                    string joinMsg = processJoin(userInputVector);
-                    sendMessage(joinMsg);
-                } else if (userInputVector[0] == "add") {
-                    string addMsg = processAdd(userInputVector);
-                    sendMessage(addMsg);
-                } else if (userInputVector[0] == "exit") {
-                    string addMsg = processExit(userInputVector);
-                    sendMessage(addMsg);
-                } else if (userInputVector[0] == "borrow") {
-                    string borrowMsg = processBorrow(userInputVector);
-                    sendMessage(borrowMsg);
-                } else if (userInputVector[0] == "return") {
-                    string returnMsg = processReturn(userInputVector);
-                    sendMessage(returnMsg);
-                } else if (userInputVector[0] == "status") {
-                    string statusMsg = processStatus(userInputVector);
-                    sendMessage(statusMsg);
-                } else if (userInputVector[0] == "logout") {
-                    string logoutMsg = processLogOut();
-                    sendMessage(logoutMsg);
-                }
+            else
+                cout << "you are not logged in, please login first" << endl;
+        } // end of first while
+        // user is now logged in
+        while (userData->isLoggedIn()) {
+            string lastUserInput;
+            cout << "entered the logged in while" << endl;
+            getline(cin, lastUserInput);
+            userInputVector = parseBySpace(lastUserInput);
+            if (userInputVector[0] == "login") {
+                string loginMsg = processLogin(userInputVector);
+                sendMessage(loginMsg);
+            } else if (userInputVector[0] == "join") {
+                string joinMsg = processJoin(userInputVector);
+                sendMessage(joinMsg);
+            } else if (userInputVector[0] == "add") {
+                string addMsg = processAdd(userInputVector);
+                sendMessage(addMsg);
+            } else if (userInputVector[0] == "exit") {
+                string addMsg = processExit(userInputVector);
+                sendMessage(addMsg);
+            } else if (userInputVector[0] == "borrow") {
+                string borrowMsg = processBorrow(userInputVector);
+                sendMessage(borrowMsg);
+            } else if (userInputVector[0] == "return") {
+                string returnMsg = processReturn(userInputVector);
+                sendMessage(returnMsg);
+            } else if (userInputVector[0] == "status") {
+                string statusMsg = processStatus(userInputVector);
+                sendMessage(statusMsg);
+            } else if (userInputVector[0] == "logout") {
+                string logoutMsg = processLogOut();
+                sendMessage(logoutMsg);
             }
         }
         serverHandlerThread->join();
     }
 }
+
 
 bool keyboardHandler::establishConnection(vector<string> &userInputVector) {
     // create Connection Handler
