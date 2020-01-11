@@ -35,11 +35,13 @@ void UserData::setUserPassword(const string &password) {
 }
 
 int UserData::incrementAndGetSubscriptionCounter() {
-    return subscriptionId++;
+    subscriptionId++;
+    return subscriptionId;
 }
 
 int UserData::incrementAndGetReceiptCounter() {
-    return receiptId++;
+    receiptId++;
+    return receiptId;
 }
 
 void UserData::addToActionLog(string receipt, string msg) {

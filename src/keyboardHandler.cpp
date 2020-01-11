@@ -13,12 +13,12 @@ keyboardHandler::keyboardHandler() {}
 
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
-    string lastUserInput;
     vector<string> userInputVector;
     userData = new UserData;
     // while user not logged in, he cant to do any command besides login
     bool flag = true;
     while (flag) {
+        string lastUserInput;
         while (!userData->isLoggedIn()) {
             getline(cin, lastUserInput);
             userInputVector = parseBySpace(lastUserInput);
@@ -70,7 +70,7 @@ bool keyboardHandler::establishConnection(vector<string> &userInputVector) {
     string host = input.substr(0, input.find(':'));
     int port = stoi(input.substr(input.find(':') + 1, input.size()));
     connectionHandler = new ConnectionHandler(host, short(port));
-    if (!connectionHandler->connect()) {
+    if (connectionHandler->connect()) {
         // create serverHandler thread
         serverHandler *serverHandler_ = new serverHandler(*connectionHandler, *userData);
         serverHandlerThread = new thread(&serverHandler::run, *serverHandler_);
@@ -184,7 +184,7 @@ string keyboardHandler::processLogOut() {
 }
 
 void keyboardHandler::sendMessage(string msg) {
-    connectionHandler->sendLine(msg);
+    connectionHandler->sendLine(msg, '\n');
 }
 
 vector<string> keyboardHandler::parseBySpace(string lastUserInput) {

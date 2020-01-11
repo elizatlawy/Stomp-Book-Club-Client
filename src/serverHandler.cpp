@@ -1,7 +1,3 @@
-//
-// Created by zatlawy@wincs.cs.bgu.ac.il on 08/01/2020.
-//
-
 
 #include <string>
 #include <iostream>
@@ -20,31 +16,33 @@ serverHandler::serverHandler(ConnectionHandler &connectionHandler, UserData &use
 void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         string message;
-        connectionHandler->getLine(message);
-        vector<std::string> serverOutputMessage = parseByLine(message);
-        if (serverOutputMessage[0] == "CONNECTED") {
-            userData->logIn();
-            cout << "Login successful" << endl;
-        } else if (serverOutputMessage[0] == "RECEIPT") {
-            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-            // prints to the screen
-            // if it is the answer of the disconnect message logout
-            if (receiptId == userData->getDisconnectReceiptId()) {
-                userData->logout();
-                // TODO: check if needed
-                connectionHandler->close();
-            } else {
-                cout << userData->getOutputMessage(receiptId) << endl;
+        connectionHandler->getLine(message, '\0');
+        if(message != ""){
+            vector<std::string> serverOutputMessage = parseByLine(message);
+            if (serverOutputMessage[0] == "CONNECTED") {
+                userData->logIn();
+                cout << "Login successful" << endl;
+            } else if (serverOutputMessage[0] == "RECEIPT") {
+                string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
+                // prints to the screen
+                // if it is the answer of the disconnect message logout
+                if (receiptId == userData->getDisconnectReceiptId()) {
+                    userData->logout();
+                    // TODO: check if needed
+                    connectionHandler->close();
+                } else {
+                    cout << userData->getOutputMessage(receiptId) << endl;
+                }
+            } else if (serverOutputMessage[0] == "ERROR") {
+                string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
+                string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':')-1);
+                cout << errorMessage << endl;
+            } else if (serverOutputMessage[0] == "MESSAGE") {
+                cout << "Client Received MESSAGE from Server" << endl;
+                string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
+                string msgBody = serverOutputMessage[5].substr(serverOutputMessage[4].find(':') + 1);
+                messageExecutor(topic, msgBody);
             }
-        } else if (serverOutputMessage[0] == "ERROR") {
-            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-            string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') + 1);
-            cout << errorMessage << endl;
-        } else if (serverOutputMessage[0] == "MESSAGE") {
-            cout << "Client Received MESSAGE from Server" << endl;
-            string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
-            string msgBody = serverOutputMessage[5].substr(serverOutputMessage[4].find(':') + 1);
-            messageExecutor(topic, msgBody);
         }
     }
 }
@@ -139,7 +137,7 @@ void serverHandler::bookStatusExecutor(string topic) {
 
 
 void serverHandler::sendMessage(string msg) {
-    connectionHandler->sendLine(msg);
+    connectionHandler->sendLine(msg, '\n');
 }
 
 vector<string> serverHandler::parseByLine(string message) {

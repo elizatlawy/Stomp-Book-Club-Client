@@ -66,12 +66,12 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
     return true;
 }
  
-bool ConnectionHandler::getLine(std::string& line) {
-    return getFrameAscii(line, '\n');
+bool ConnectionHandler::getLine(std::string& line, char delimiter) {
+    return getFrameAscii(line, delimiter);
 }
 
-bool ConnectionHandler::sendLine(std::string& line) {
-    return sendFrameAscii(line, '\n');
+bool ConnectionHandler::sendLine(std::string& line, char delimiter) {
+    return sendFrameAscii(line, delimiter);
 }
  
 
