@@ -6,8 +6,8 @@
 using namespace std;
 
 int main() {
-
-    keyboardHandler keyboardHandler_ =  keyboardHandler();
+    mutex mutex;
+    keyboardHandler keyboardHandler_ =  keyboardHandler(mutex);
     keyboardHandler_.run();
 
     return 0;

@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <mutex>
+#include <condition_variable>
 #include "connectionHandler.h"
 #include "serverHandler.h"
 
@@ -16,7 +18,7 @@ using namespace std;
 
 class keyboardHandler {
 public:
-    keyboardHandler();
+    keyboardHandler(mutex & _mutex);
 
     void run();
 
@@ -25,6 +27,8 @@ private:
     ConnectionHandler *connectionHandler;
     thread *serverHandlerThread;
     UserData *userData;
+    mutex & _mutex;
+    std::condition_variable cv;
     bool establishConnection (vector<string> &userInputVector);
     string processLogin (vector<string> &userInputVector );
     string processJoin (vector<string> &userInputVector);

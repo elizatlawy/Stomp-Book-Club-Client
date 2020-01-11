@@ -42,6 +42,10 @@ public:
     void setDisconnectReceiptId(string disconnectReceiptId);
     string listOfAvailableBooksByTopic(string topic);
 
+    bool isLoginLock() const;
+
+    void setLoginLock(bool loginLock);
+
 
 private:
     string userName;
@@ -49,6 +53,7 @@ private:
     bool loggedIn;
     int subscriptionId;
     int receiptId;
+    bool loginLock = false;
     string disconnectReceiptId;
     unordered_map<string,string> actionLog;
     unordered_map<std::string,std::vector<Book*>> inventory;

@@ -9,6 +9,7 @@ UserData::UserData()
 
 void UserData::logIn() {
     loggedIn = true;
+
 }
 
 void UserData::logout() {
@@ -107,6 +108,14 @@ string UserData::getDisconnectReceiptId() const {
 
 void UserData::setDisconnectReceiptId(string disconnectReceiptId) {
     UserData::disconnectReceiptId = disconnectReceiptId;
+}
+
+bool UserData::isLoginLock() const {
+    return loginLock;
+}
+
+void UserData::setLoginLock(bool loginLock) {
+    UserData::loginLock = loginLock;
 }
 
 UserData::~UserData() {}

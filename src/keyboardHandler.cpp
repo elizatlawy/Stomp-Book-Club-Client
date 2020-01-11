@@ -9,7 +9,7 @@
 
 using namespace std;
 
-keyboardHandler::keyboardHandler() {}
+keyboardHandler::keyboardHandler(mutex & _mutex) : _mutex(_mutex){}
 
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
@@ -18,7 +18,6 @@ void keyboardHandler::run() {
     // while user not logged in, he cant to do any command besides login
     bool flag = true;
     while (flag) {
-
         while (!userData->isLoggedIn()) {
             string lastUserInput;
             getline(cin, lastUserInput);
@@ -27,8 +26,10 @@ void keyboardHandler::run() {
                 if (establishConnection(userInputVector)) {
                     string loginMsg = processLogin(userInputVector);
                     sendMessage(loginMsg);
+//                    unique_lock<std::mutex> lk(_mutex);
+//                    cv.wait(lk, [this]{return userData->isLoginLock();});
+                        // TODO: FIX IT
                     while(!userData->isLoggedIn())
-                        cout << "Please wait for login..." << endl;
 
                 } else
                     cout << "Could not connect to the server" << endl;
