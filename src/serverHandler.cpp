@@ -111,7 +111,8 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
 void serverHandler::takeBookExecutor(string topic, string msgBody) {
     string toTakeFromName = msgBody.substr(msgBody.find_last_of(' ') + 1);
     if (toTakeFromName == userData->getUserName()) {
-        string bookName = msgBody.substr(msgBody.find(' ') + 1);
+        int index = msgBody.find(' from ');
+        string bookName = msgBody.substr(index + 1);
         userData->changeBookAvailability(topic, bookName, false);
     }
 }
@@ -120,7 +121,8 @@ void serverHandler::returnBookExecutor(string topic, string msgBody) {
     string toReturnName = msgBody.substr(msgBody.find_last_of(' ') + 1);
     // if the some want to return the book to me
     if (toReturnName == userData->getUserName()) {
-        string bookName = msgBody.substr(msgBody.find(' ') + 1);
+        int index = msgBody.find(' to ');
+        string bookName = msgBody.substr(index + 1);
         // but the book back to my inventory.
         userData->changeBookAvailability(topic, bookName, true);
     }
