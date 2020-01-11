@@ -55,7 +55,7 @@ void serverHandler::messageExecutor(string topic, string msgBody) {
     if (msgBody.find("wish to borrow") != string::npos)
         wishBookExecutor(topic, msgBody);
 
-    // message type is {User} has {bookName} or  {User} has added the book
+        // message type is {User} has {bookName} or  {User} has added the book
     else if (msgBody.find(" has ") != string::npos)
         hasBookExecutor(topic, msgBody);
 
@@ -69,14 +69,10 @@ void serverHandler::messageExecutor(string topic, string msgBody) {
         bookStatusExecutor(topic);
         // TODO: delete this before submission
         // else this is the  book status of other users message
-    else {
+    else
         cout << msgBody << endl;
-
-    }
-
-
 } // end of messageExecutor
-}
+
 
 void serverHandler::wishBookExecutor(string topic, string msgBody) {
     string bookName = msgBody.substr(msgBody.find_last_of(' ') + 1);
@@ -104,6 +100,7 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
         sendMessage(msg);
     }
 }
+
 void serverHandler::takeBookExecutor(string topic, string msgBody) {
     string toTakeFromName = msgBody.substr(msgBody.find_last_of(' ') + 1);
     if (toTakeFromName == userData->getUserName()) {
@@ -121,37 +118,38 @@ void serverHandler::returnBookExecutor(string topic, string msgBody) {
         userData->changeBookAvailability(topic, bookName, true);
     }
 }
-    void serverHandler::bookStatusExecutor(string topic) {
-        string bookList = userData->listOfAvailableBooksByTopic(topic);
-        // send the message
-        string msg = string("SEND") + '\n'
-                     + string("destination:") + topic + '\n'
-                     + userData->getUserName() + (":") + bookList + '\n' + '\0';
-        sendMessage(msg);
+
+void serverHandler::bookStatusExecutor(string topic) {
+    string bookList = userData->listOfAvailableBooksByTopic(topic);
+    // send the message
+    string msg = string("SEND") + '\n'
+                 + string("destination:") + topic + '\n'
+                 + userData->getUserName() + (":") + bookList + '\n' + '\0';
+    sendMessage(msg);
+}
+
+
+void serverHandler::sendMessage(string msg) {
+    connectionHandler->sendLine(msg);
+}
+
+vector<string> serverHandler::parseByLine(string message) {
+    std::stringstream ss(message);
+    std::string line;
+    vector<string> results;
+    while (std::getline(ss, line, '\n')) {
+        results.push_back(line);
     }
+    return results;
+}
 
 
-    void serverHandler::sendMessage(string msg) {
-        connectionHandler->sendLine(msg);
-    }
-
-    vector<string> serverHandler::parseByLine(string message) {
-        std::stringstream ss(message);
-        std::string line;
-        vector<string> results;
-        while (std::getline(ss, line, '\n')) {
-            results.push_back(line);
-        }
-        return results;
-    }
-
-
-    vector<string> serverHandler::parseBySpace(string message) {
-        std::istringstream iss(message);
-        vector<string> results(istream_iterator<string>{iss},
-                               istream_iterator<string>());
-        return results;
-    }
+vector<string> serverHandler::parseBySpace(string message) {
+    std::istringstream iss(message);
+    vector<string> results(istream_iterator<string>{iss},
+                           istream_iterator<string>());
+    return results;
+}
 
 
 
