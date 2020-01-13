@@ -9,7 +9,7 @@
 
 using namespace std;
 
-keyboardHandler::keyboardHandler(){}
+keyboardHandler::keyboardHandler() {}
 
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
@@ -19,22 +19,17 @@ void keyboardHandler::run() {
     bool flag = true;
     while (flag) {
         while (!userData->isLoggedIn()) {
+            userData->setLoginLock(true);
             string lastUserInput;
             getline(cin, lastUserInput);
             userInputVector = parseBySpace(lastUserInput);
             if (userInputVector[0] == "login") {
                 if (establishConnection(userInputVector)) {
-                    string loginMsg = processLogin(userInputVector);
-                    sendMessage(loginMsg);
-//                    unique_lock<std::mutex> lk(_mutex);
-//                    cv.wait(lk, [this]{return userData->isLoginLock();});
-                        // TODO: FIX IT
-                    while(!userData->isLoggedIn()){}
-
+                    processLogin(userInputVector);
+                    while (userData->isLoginLock()) {}
                 } else
                     cout << "Could not connect to the server" << endl;
-            }
-            else
+            } else
                 cout << "you are not logged in, please login first" << endl;
         } // end of first while
         // user is now logged in
@@ -43,36 +38,27 @@ void keyboardHandler::run() {
             getline(cin, lastUserInput);
             userInputVector = parseBySpace(lastUserInput);
             if (userInputVector[0] == "login") {
-                string loginMsg = processLogin(userInputVector);
-                sendMessage(loginMsg);
+                processLogin(userInputVector);
             } else if (userInputVector[0] == "join") {
-                string joinMsg = processJoin(userInputVector);
-                sendMessage(joinMsg);
+                processJoin(userInputVector);
             } else if (userInputVector[0] == "add") {
-                string addMsg = processAdd(userInputVector);
-                sendMessage(addMsg);
+                processAdd(userInputVector);
             } else if (userInputVector[0] == "exit") {
-                string addMsg = processExit(userInputVector);
-                sendMessage(addMsg);
+                processExit(userInputVector);
             } else if (userInputVector[0] == "borrow") {
-                string borrowMsg = processBorrow(userInputVector);
-                sendMessage(borrowMsg);
+                processBorrow(userInputVector);
             } else if (userInputVector[0] == "return") {
-                string returnMsg = processReturn(userInputVector);
-                sendMessage(returnMsg);
+                processReturn(userInputVector);
             } else if (userInputVector[0] == "status") {
-                string statusMsg = processStatus(userInputVector);
-                sendMessage(statusMsg);
+                processStatus(userInputVector);
             } else if (userInputVector[0] == "logout") {
-                string logoutMsg = processLogOut();
-                sendMessage(logoutMsg);
+                processLogOut();
             }
         }
         serverHandlerThread->join();
         cout << "you have been DISCONNECTED, bye bye..." << endl;
     }
 }
-
 
 bool keyboardHandler::establishConnection(vector<string> &userInputVector) {
     // create Connection Handler
@@ -89,7 +75,7 @@ bool keyboardHandler::establishConnection(vector<string> &userInputVector) {
     return false;
 }
 
-string keyboardHandler::processLogin(vector<string> &userInputVector) {
+void keyboardHandler::processLogin(vector<string> &userInputVector) {
     // set userName and password
     userData->setUserName(userInputVector[2]);
     userData->setUserPassword(userInputVector[3]);
@@ -99,55 +85,59 @@ string keyboardHandler::processLogin(vector<string> &userInputVector) {
                     + string("host:stomp.cs.bg.ac.il") + '\n'
                     + string("login:") + userData->getUserName() + '\n'
                     + string("passcode:") + userData->getUserPassword() + '\n' + '\0';
-    return output;
+    sendMessage(output);
 }
 
-string keyboardHandler::processJoin(vector<string> &userInputVector) {
-    // add to actionLog
+void keyboardHandler::processJoin(vector<string> &userInputVector) {
+    // add to subscriptionsLogById
     string topic = userInputVector[1];
     string receiptId = to_string(userData->incrementAndGetReceiptCounter());
-    string msg = "Joined club " + topic;
-    userData->addToActionLog(receiptId, msg);
-    // decode msg
     string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
-    userData->addActiveSubscription(topic,subscriptionId);
+    userData->addSubscriptionLogById(receiptId, topic);
+    userData->addCommandLog(receiptId, "SUBSCRIBE");
+    userData->addSubscriptionsLogByTopic(topic, subscriptionId);
+    // decode msg
+    userData->addSubscriptionsLogByTopic(topic, subscriptionId);
     string output = string("SUBSCRIBE") + '\n'
                     + string("destination:") + topic + '\n'
                     + string("id:") + subscriptionId + '\n'
                     + string("receipt:") + receiptId + '\n' + '\0';
-    return output;
+    sendMessage(output);
 }
 
-string keyboardHandler::processAdd(vector<string> &userInputVector) {
+void keyboardHandler::processAdd(vector<string> &userInputVector) {
 // add to inventory
     string topic = userInputVector[1];
     string bookName = createBookName(userInputVector);
-    string userName = userData->getUserName();
-    Book *currBook = new Book(bookName, userName, true);
-    userData->addBook(topic, *currBook);
-    // decode msg
-    string msgBody = userName + " has added the book " + bookName;
-    string output = string("SEND") + '\n'
-                    + string("destination:") + topic + '\n' + '\n'
-                    + msgBody + '\n' + '\0';
-    return output;
+    if (!userData->isAvailableBook(topic, bookName)) {
+        string userName = userData->getUserName();
+        Book *currBook = new Book(bookName, userName, true);
+        userData->addBook(topic, *currBook);
+        // decode msg
+        string msgBody = userName + " has added the book " + bookName;
+        string output = string("SEND") + '\n'
+                        + string("destination:") + topic + '\n' + '\n'
+                        + msgBody + '\n' + '\0';
+        sendMessage(output);
+    }
 }
 
-string keyboardHandler::processExit(vector<string> &userInputVector) {
-    // add to actionLog
+void keyboardHandler::processExit(vector<string> &userInputVector) {
+    // add to subscriptionsLogById
     string topic = userInputVector[1];
     string receiptId = to_string(userData->incrementAndGetReceiptCounter());
-    string msg = "Exited club " + topic;
-    userData->addToActionLog(receiptId, msg);
+    string subscriptionId = userData->getSubscriptionsLogByTopic(topic);
+
+    userData->addSubscriptionLogById(receiptId, topic);
+    userData->addCommandLog(receiptId, "UNSUBSCRIBE");
     // decode msg
-    string subscriptionId = userData->getActiveSubscriptionId(topic);
     string output = string("UNSUBSCRIBE") + '\n'
                     + string("id:") + subscriptionId + '\n'
                     + string("receipt:") + receiptId + '\n' + '\0';
-    return output;
+    sendMessage(output);
 }
 
-string keyboardHandler::processBorrow(vector<string> &userInputVector) {
+void keyboardHandler::processBorrow(vector<string> &userInputVector) {
     // add to user wish list
     string bookName = createBookName(userInputVector);
     userData->addToWishList(bookName);
@@ -158,11 +148,10 @@ string keyboardHandler::processBorrow(vector<string> &userInputVector) {
     string output = string("SEND") + '\n'
                     + string("destination:") + topic + '\n' + '\n'
                     + msgBody + '\n' + '\0';
-    return output;
-
+    sendMessage(output);
 }
 
-string keyboardHandler::processReturn(vector<string> &userInputVector) {
+void keyboardHandler::processReturn(vector<string> &userInputVector) {
     // decode msg
     string topic = userInputVector[1];
     string bookName = createBookName(userInputVector);
@@ -171,27 +160,26 @@ string keyboardHandler::processReturn(vector<string> &userInputVector) {
     string output = string("SEND") + '\n'
                     + string("destination:") + topic + '\n' + '\n'
                     + msgBody + '\n' + '\0';
-    return output;
-
+    sendMessage(output);
 }
 
-string keyboardHandler::processStatus(vector<string> &userInputVector) {
+void keyboardHandler::processStatus(vector<string> &userInputVector) {
     // decode msg
     string topic = userInputVector[1];
     string msgBody = "book status";
     string output = string("SEND") + '\n'
                     + string("destination:") + topic + '\n' + '\n'
                     + msgBody + '\n' + '\0';
-    return output;
+    sendMessage(output);
 }
 
-string keyboardHandler::processLogOut() {
+void keyboardHandler::processLogOut() {
     // decode msg
     string receiptId = to_string(userData->incrementAndGetReceiptCounter());
     userData->setDisconnectReceiptId(receiptId);
     string output = string("DISCONNECT") + '\n'
                     + string("receipt:") + receiptId + '\n' + '\0';
-    return output;
+    sendMessage(output);
 }
 
 void keyboardHandler::sendMessage(string msg) {
@@ -207,9 +195,9 @@ vector<string> keyboardHandler::parseBySpace(string lastUserInput) {
 
 string keyboardHandler::createBookName(vector<string> &userInputVector) {
     string bookName = "";
-    for (int i = 2 ; i < userInputVector.size() ; i++){
-        bookName = string(bookName) + string(userInputVector[i]) + string( " ");
+    for (int i = 2; i < userInputVector.size(); i++) {
+        bookName = string(bookName) + string(userInputVector[i]) + string(" ");
     }
-    bookName = bookName.substr(0, bookName.length()-1);
+    bookName = bookName.substr(0, bookName.length() - 1);
     return bookName;
 }

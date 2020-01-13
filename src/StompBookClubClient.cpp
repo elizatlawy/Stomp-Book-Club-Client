@@ -6,8 +6,8 @@
 using namespace std;
 
 int main() {
-    keyboardHandler* keyboardHandler_ =  new keyboardHandler();
-    keyboardHandler_->run();
+    keyboardHandler keyboardHandler_ = keyboardHandler();
+    keyboardHandler_.run();
     return 0;
 }
 

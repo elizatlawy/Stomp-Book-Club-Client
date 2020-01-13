@@ -6,7 +6,7 @@
 
 
 UserData::UserData()
-        : loggedIn(false), subscriptionId(0), receiptId(0),disconnectReceiptId("-1"), actionLog(), inventory(), wishList() {}
+        : loggedIn(false), subscriptionId(0), receiptId(0), disconnectReceiptId("-1"), subscriptionsLogById(), inventory(), wishList() {}
 
 void UserData::logIn() {
     loggedIn = true;
@@ -46,29 +46,30 @@ int UserData::incrementAndGetReceiptCounter() {
     return receiptId;
 }
 
-void UserData::addToActionLog(string receipt, string msg) {
-    actionLog.insert(make_pair(receipt, msg));
-}
 string UserData::getOutputMessage(string receipt) {
-    return actionLog.at(receipt);
+    return subscriptionsLogById.at(receipt);
 }
 
 
 void UserData::addBook(string topic, Book& book) {
     // topic is not found in inventory
-    if (inventory.find(topic) == inventory.end()) {
-        inventory.insert(make_pair(topic, vector<Book*>()));
+    if(!isAvailableBook(topic,book.getBookName())){
+        if (inventory.find(topic) == inventory.end()) {
+            inventory.insert(make_pair(topic, vector<Book*>()));
+        }
+        // topic is exist
+        vector<Book*> *listOfBooks = &inventory.at(topic);
+        listOfBooks->push_back(&book);
     }
-    // topic is exist
-    vector<Book*> *listOfBooks = &inventory.at(topic);
-    listOfBooks->push_back(&book);
 }
 
 bool UserData::isAvailableBook(string topic, const string& requestedBookName) {
-    vector<Book*> listOfBooks = inventory.at(topic);
-    for (Book* currBook : listOfBooks){
-        if(currBook->getBookName() == requestedBookName)
-            return currBook->isAvailable();
+    if (inventory.find(topic) != inventory.end()){ // the topic exist
+        vector<Book*> listOfBooks = inventory.at(topic);
+        for (Book* currBook : listOfBooks){
+            if(currBook->getBookName() == requestedBookName)
+                return currBook->isAvailable();
+        }
     }
     return false;
 }
@@ -121,17 +122,37 @@ void UserData::setLoginLock(bool loginLock) {
 
 UserData::~UserData() {}
 
-string UserData::getActiveSubscriptionId(string topic) {
-    return activeSubscription.at(topic);
+string UserData::getSubscriptionLogById(string receiptId) {
+    return subscriptionsLogById.at(receiptId);
 
 }
 
-void UserData::addActiveSubscription(string topic, string subscriptionId) {
-    activeSubscription.insert(make_pair(topic,subscriptionId));
+void UserData::addSubscriptionsLogByTopic(string topic, string subscriptionId) {
+    subscriptionsLogByTopic.insert(make_pair(topic, subscriptionId));
 }
 
-void UserData::removeActiveSubscription(string topic) {
-    activeSubscription.erase(topic);
+void UserData::removeSubscriptionsLogByTopic(string topic) {
+    subscriptionsLogByTopic.erase(topic);
+}
+void UserData::addSubscriptionLogById(string receiptId, string topic) {
+    subscriptionsLogById.insert(make_pair(receiptId, topic));
+}
+void UserData::removeSubscriptionLogById(string receiptId) {
+    subscriptionsLogById.erase(receiptId);
+}
+
+void UserData::addCommandLog(string receiptId, string command) {
+    commandLog.insert(make_pair(receiptId,command));
+
+}
+
+string UserData::getCommand(string receiptId) {
+    return commandLog.at(receiptId);
+
+}
+
+string UserData::getSubscriptionsLogByTopic(string topic) {
+    return  subscriptionsLogByTopic.at(topic);
 }
 
 

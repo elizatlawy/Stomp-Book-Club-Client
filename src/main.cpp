@@ -11,13 +11,11 @@
 //using namespace std;
 //
 //int main(int argc, char **argv) {
-//    vector <string> userInputVector = {"game","of","thrones"};
-//    string bookName = "";
-//    for (int i = 0 ; i < userInputVector.size() ; i++){
-//        bookName = string(bookName) + string(userInputVector[i]) + string( " ");
-//    }
-//    bookName.substr(0, bookName.size()-1);
-//    cout << bookName << endl;
+//        string msgBody = "Returning Very long book name from john";
+//    int end = msgBody.find("from");
+//    int start = msgBody.find("Returning ");
+//    string bookName = msgBody.substr(10, end - start - 11);
+//        cout << bookName << endl;
 //
 //}
 //

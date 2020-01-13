@@ -27,7 +27,6 @@ public:
     void logout();
     int incrementAndGetSubscriptionCounter();
     int incrementAndGetReceiptCounter();
-    void addToActionLog(string receiptId, string msg);
     string getOutputMessage(string receiptId);
     void addBook (string topic, Book& book);
     bool isAvailableBook (string topic, const string& requestedBookName);
@@ -40,11 +39,18 @@ public:
     string listOfAvailableBooksByTopic(string topic);
 
     bool isLoginLock() const;
-
     void setLoginLock(bool loginLock);
-    string getActiveSubscriptionId(string topic);
-    void addActiveSubscription(string topic, string subscriptionId);
-    void removeActiveSubscription(string topic);
+
+    string getSubscriptionLogById(string receiptId);
+    void addSubscriptionLogById(string receiptId, string topic);
+    void removeSubscriptionLogById(string receiptId);
+
+    void addSubscriptionsLogByTopic(string topic, string subscriptionId);
+    void removeSubscriptionsLogByTopic(string topic);
+    string getSubscriptionsLogByTopic(string topic);
+
+    void addCommandLog(string receiptId, string command);
+    string getCommand(string receiptId );
 
 
 private:
@@ -53,12 +59,15 @@ private:
     bool loggedIn;
     int subscriptionId;
     int receiptId;
-    bool loginLock = false;
+    bool loginLock = true;
     string disconnectReceiptId;
-    unordered_map<string,string> actionLog;
     unordered_map<std::string,std::vector<Book*>> inventory;
     vector<string> wishList; // vector of wished book names
-    unordered_map<string,string> activeSubscription; // key: topic name value: subscriptionId
+    unordered_map<string,string> subscriptionsLogByTopic; // key: topic name value: subscriptionId
+    unordered_map<string,string> subscriptionsLogById; // key: receiptId value: topic name
+    unordered_map<string,string> commandLog; // key: receiptId value: command name
+
+
 
 };
 
