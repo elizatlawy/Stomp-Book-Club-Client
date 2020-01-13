@@ -17,7 +17,7 @@ public:
 private:
     ConnectionHandler *connectionHandler;
     UserData *userData;
-    void messageExecutor(string topic, string msgBody);
+    void handleMessageFrame(string topic, string msgBody);
     void sendMessage (string msg);
     vector<string> parseByLine(string message);
     vector<string> parseBySpace(string message);
@@ -26,6 +26,9 @@ private:
     void takeBookExecutor(string topic, string msgBody);
     void returnBookExecutor(string topic, string msgBody);
     void bookStatusExecutor(string topic);
+    void handleConnectedFrame();
+    void handleReceiptFrame(string receiptId);
+    void handleErrorFrame(string errorMessage);
 
 
 
