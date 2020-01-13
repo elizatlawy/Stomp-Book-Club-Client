@@ -35,10 +35,9 @@ void serverHandler::run() {
                 connectionHandler->close();
             } else if (userData->getCommand(receiptId) == "SUBSCRIBE") {
                 cout << string("Joined club ") + userData->getSubscriptionLogById(receiptId) << endl;
-            }
-            else{ // the command "UNSUBSCRIBE"
+            } else { // the command "UNSUBSCRIBE"
                 topic = userData->getSubscriptionLogById(receiptId);
-                cout <<  string("Exited club ") + topic  << endl;
+                cout << string("Exited club ") + topic << endl;
                 userData->removeSubscriptionsLogByTopic(topic);
                 userData->removeSubscriptionLogById(receiptId);
             }
@@ -62,28 +61,28 @@ void serverHandler::run() {
 void serverHandler::messageExecutor(string topic, string msgBody) {
     // message type is wish to borrow
     if (msgBody.find("wish to borrow") != string::npos) {
-        //cout << "Client STARTED process: " + msgBody << endl;
+        cout << "Client STARTED process: " + msgBody << endl;
         wishBookExecutor(topic, msgBody);
-        //cout << "Client FINISHED process: " + msgBody << endl;
+        cout << "Client FINISHED process: " + msgBody << endl;
 
     }
         // message type is {User} has {bookName} or  {User} has added the book
     else if (msgBody.find(" has ") != string::npos) {
-        //cout << "Client STARTED process:" + msgBody << endl;
+        cout << "Client STARTED process:" + msgBody << endl;
         hasBookExecutor(topic, msgBody);
-        //cout << "Client FINISHED process:" + msgBody << endl;
+        cout << "Client FINISHED process:" + msgBody << endl;
     } else if (msgBody.find(" Taking ") != string::npos) {
-       // cout << "Client STARTED process:" + msgBody << endl;
+        cout << "Client STARTED process:" + msgBody << endl;
         takeBookExecutor(topic, msgBody);
-       // cout << "Client FINISHED process:" + msgBody << endl;
+        cout << "Client FINISHED process:" + msgBody << endl;
     } else if (msgBody.find("Returning") != string::npos) {
-        //cout << "Client STARTED process:" + msgBody << endl;
+        cout << "Client STARTED process:" + msgBody << endl;
         returnBookExecutor(topic, msgBody);
-        //cout << "Client FINISHED process: " + msgBody << endl;
+        cout << "Client FINISHED process: " + msgBody << endl;
     } else if (msgBody.find("book status") != string::npos) {
-        //cout << "Client STARTED process: " + msgBody << endl;
+        cout << "Client STARTED process: " + msgBody << endl;
         bookStatusExecutor(topic);
-      //  cout << "Client FINISHED process: " +  msgBody << endl;
+        cout << "Client FINISHED process: " + msgBody << endl;
     }
         // TODO: delete this before submission
         // else this is the  book status of other users message
