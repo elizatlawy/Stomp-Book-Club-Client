@@ -67,11 +67,11 @@ void serverHandler::messageExecutor(string topic, string msgBody) {
 
     }
         // message type is {User} has {bookName} or  {User} has added the book
-    else if (msgBody.find(" has ") != string::npos) {
+    else if (msgBody.find("has") != string::npos) {
         cout << "Client STARTED process:" + msgBody << endl;
         hasBookExecutor(topic, msgBody);
         cout << "Client FINISHED process:" + msgBody << endl;
-    } else if (msgBody.find(" Taking ") != string::npos) {
+    } else if (msgBody.find("Taking") != string::npos) {
         cout << "Client STARTED process:" + msgBody << endl;
         takeBookExecutor(topic, msgBody);
         cout << "Client FINISHED process:" + msgBody << endl;
@@ -126,7 +126,7 @@ void serverHandler::takeBookExecutor(string topic, string msgBody) {
         string bookName = msgBody.substr(7, end - 8);
         userData->changeBookAvailability(topic, bookName, false);
     }
-} //
+}
 
 void serverHandler::returnBookExecutor(string topic, string msgBody) {
     string toReturnName = msgBody.substr(msgBody.find_last_of(' ') + 1);
