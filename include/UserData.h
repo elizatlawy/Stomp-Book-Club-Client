@@ -56,6 +56,8 @@ public:
     void addCommandLog(string receiptId, string command);
     string getCommand(string receiptId );
 
+    string getBookOwner (string topic, string bookName);
+
 
 private:
     string userName;

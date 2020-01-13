@@ -157,12 +157,14 @@ void keyboardHandler::processReturn(vector<string> &userInputVector) {
     // decode msg
     string topic = userInputVector[1];
     string bookName = createBookName(userInputVector);
-    string userName = userData->getUserName();
-    string msgBody = "Returning " + bookName + " to " + userName;
-    string output = string("SEND") + '\n'
-                    + string("destination:") + topic + '\n' + '\n'
-                    + msgBody + '\n' + '\0';
-    sendMessage(output);
+    if(userData->isAvailableBook(topic, bookName)){
+        string ownerName = userData->getBookOwner(topic,bookName);
+        string msgBody = "Returning " + bookName + " to " + ownerName;
+        string output = string("SEND") + '\n'
+                        + string("destination:") + topic + '\n' + '\n'
+                        + msgBody + '\n' + '\0';
+        sendMessage(output);
+    }
 }
 
 void keyboardHandler::processStatus(vector<string> &userInputVector) {

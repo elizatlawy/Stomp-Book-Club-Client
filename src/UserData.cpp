@@ -6,7 +6,8 @@
 
 
 UserData::UserData()
-        : loggedIn(false), subscriptionId(0), receiptId(0), disconnectReceiptId("-1"), subscriptionsLogById(), inventory(), wishList() {}
+        : loggedIn(false), subscriptionId(0), receiptId(0), disconnectReceiptId("-1"), subscriptionsLogById(),
+          inventory(), wishList() {}
 
 void UserData::logIn() {
     loggedIn = true;
@@ -16,6 +17,7 @@ void UserData::logIn() {
 void UserData::logout() {
     loggedIn = false;
 }
+
 bool UserData::isLoggedIn() {
     return loggedIn;
 }
@@ -51,44 +53,46 @@ string UserData::getOutputMessage(string receipt) {
 }
 
 
-void UserData::addBook(string topic, Book& book) {
+void UserData::addBook(string topic, Book &book) {
     // topic is not found in inventory
-    if(!isAvailableBook(topic,book.getBookName())){
+    if (!isAvailableBook(topic, book.getBookName())) {
         if (inventory.find(topic) == inventory.end()) {
-            inventory.insert(make_pair(topic, vector<Book*>()));
+            inventory.insert(make_pair(topic, vector<Book *>()));
         }
         // topic is exist
-        vector<Book*> *listOfBooks = &inventory.at(topic);
+        vector<Book *> *listOfBooks = &inventory.at(topic);
         listOfBooks->push_back(&book);
     }
 }
 
-bool UserData::isAvailableBook(string topic, const string& requestedBookName) {
-    if (inventory.find(topic) != inventory.end()){ // the topic exist
-        vector<Book*> listOfBooks = inventory.at(topic);
-        for (Book* currBook : listOfBooks){
-            if(currBook->getBookName() == requestedBookName)
+bool UserData::isAvailableBook(string topic, const string &requestedBookName) {
+    if (inventory.find(topic) != inventory.end()) { // the topic exist
+        vector<Book *> listOfBooks = inventory.at(topic);
+        for (Book *currBook : listOfBooks) {
+            if (currBook->getBookName() == requestedBookName)
                 return currBook->isAvailable();
         }
     }
     return false;
 }
-void UserData::changeBookAvailability(string topic, const string& requestedBookName, bool status) {
+
+void UserData::changeBookAvailability(string topic, const string &requestedBookName, bool status) {
     vector<Book *> listOfBooks = inventory.at(topic);
     for (Book *currBook : listOfBooks) {
         if (currBook->getBookName() == requestedBookName)
             currBook->setAvailable(status);
     }
 }
+
 string UserData::listOfAvailableBooksByTopic(string topic) {
     string output = "";
     vector<Book *> listOfBooks = inventory.at(topic);
-    for (Book *currBook : listOfBooks){
-        if(currBook->isAvailable()){
+    for (Book *currBook : listOfBooks) {
+        if (currBook->isAvailable()) {
             output = output + currBook->getBookName() + ", ";
         }
     }
-    output = output.substr(0,output.length()-2);
+    output = output.substr(0, output.length() - 2);
     return output;
 }
 
@@ -134,15 +138,17 @@ void UserData::addSubscriptionsLogByTopic(string topic, string subscriptionId) {
 void UserData::removeSubscriptionsLogByTopic(string topic) {
     subscriptionsLogByTopic.erase(topic);
 }
+
 void UserData::addSubscriptionLogById(string receiptId, string topic) {
     subscriptionsLogById.insert(make_pair(receiptId, topic));
 }
+
 void UserData::removeSubscriptionLogById(string receiptId) {
     subscriptionsLogById.erase(receiptId);
 }
 
 void UserData::addCommandLog(string receiptId, string command) {
-    commandLog.insert(make_pair(receiptId,command));
+    commandLog.insert(make_pair(receiptId, command));
 
 }
 
@@ -152,7 +158,7 @@ string UserData::getCommand(string receiptId) {
 }
 
 string UserData::getSubscriptionsLogByTopic(string topic) {
-    return  subscriptionsLogByTopic.at(topic);
+    return subscriptionsLogByTopic.at(topic);
 }
 
 bool UserData::isLogOutLock() const {
@@ -163,8 +169,14 @@ void UserData::setLogOutLock(bool logOutLock) {
     UserData::logOutLock = logOutLock;
 }
 
-
-
-
+string UserData::getBookOwner(string topic, string bookName) {
+    if (inventory.find(topic) != inventory.end()) { // the topic exist
+        vector<Book *> listOfBooks = inventory.at(topic);
+        for (Book *currBook : listOfBooks) {
+            if (currBook->getBookName() == bookName)
+                return currBook->getBookOwner();
+        }
+    }
+}
 
 
