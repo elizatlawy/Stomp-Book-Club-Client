@@ -22,51 +22,28 @@ void serverHandler::run() {
         connectionHandler->getLine(message, '\0');
         vector<std::string> serverOutputMessage = parseByLine(message);
         if (serverOutputMessage[0] == "CONNECTED") {
-            userData->logIn();
-            userData->setLoginLock(false);
-            cout << "Login successful" << endl;
+            handleConnectedFrame();
         } else if (serverOutputMessage[0] == "RECEIPT") {
             string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-            // prints to the screen
-            // if it is the answer of the disconnect message logout
-            if (receiptId == userData->getDisconnectReceiptId()) {
-                userData->setLoginLock(false);
-                userData->logout();
-                userData->setLogOutLock(false);
-                // TODO: check if needed
-                connectionHandler->close();
-            } else if (userData->getCommand(receiptId) == "SUBSCRIBE") {
-                cout << string("Joined club ") + userData->getSubscriptionLogById(receiptId) << endl;
-            } else { // the command "UNSUBSCRIBE"
-                topic = userData->getSubscriptionLogById(receiptId);
-                cout << string("Exited club ") + topic << endl;
-                userData->removeSubscriptionsLogByTopic(topic);
-                userData->removeSubscriptionLogById(receiptId);
-            }
+            handleReceiptFrame(receiptId);
         } else if (serverOutputMessage[0] == "ERROR") {
-            userData->setLoginLock(false);
-            userData->logout();
-            //string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
             string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
-            cout << errorMessage << endl;
+            handleErrorFrame(errorMessage);
         } else if (serverOutputMessage[0] == "MESSAGE") {
             string msgBody = serverOutputMessage[5];
             cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
             topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
-
-            messageExecutor(topic, msgBody);
+            handleMessageFrame(topic, msgBody);
         }
     }
-
 }
 
-void serverHandler::messageExecutor(string topic, string msgBody) {
+void serverHandler::handleMessageFrame(string topic, string msgBody) {
     // message type is wish to borrow
     if (msgBody.find("wish to borrow") != string::npos) {
         cout << "Client STARTED process: " + msgBody << endl;
         wishBookExecutor(topic, msgBody);
         cout << "Client FINISHED process: " + msgBody << endl;
-
     }
         // message type is {User} has {bookName} or  {User} has added the book
     else if (msgBody.find("has") != string::npos) {
@@ -90,8 +67,7 @@ void serverHandler::messageExecutor(string topic, string msgBody) {
         // else this is the  book status of other users message
     else
         cout << msgBody << endl;
-} // end of messageExecutor
-
+} // end of handleMessageFrame
 
 void serverHandler::wishBookExecutor(string topic, string msgBody) {
     string bookName = msgBody.substr(msgBody.find_last_of(' ') + 1);
@@ -152,6 +128,36 @@ void serverHandler::bookStatusExecutor(string topic) {
 }
 
 
+
+void serverHandler::handleConnectedFrame() {
+    userData->logIn();
+    userData->setLoginLock(false);
+    cout << "Login successful" << endl;
+
+}
+
+void serverHandler::handleReceiptFrame(string receiptId) {
+    if (receiptId == userData->getDisconnectReceiptId()) {
+        userData->setLoginLock(false);
+        userData->logout();
+        userData->setLogOutLock(false);
+        // TODO: check if needed
+        connectionHandler->close();
+    } else if (userData->getCommand(receiptId) == "SUBSCRIBE") {
+        cout << string("Joined club ") + userData->getSubscriptionLogById(receiptId) << endl;
+    } else { // the command "UNSUBSCRIBE"
+        string topic = userData->getSubscriptionLogById(receiptId);
+        cout << string("Exited club ") + topic << endl;
+        userData->removeSubscriptionsLogByTopic(topic);
+        userData->removeSubscriptionLogById(receiptId);
+    }
+}
+
+void serverHandler::handleErrorFrame(string errorMessage) {
+    userData->setLoginLock(false);
+    userData->logout();
+    cout << errorMessage << endl;
+}
 void serverHandler::sendMessage(string msg) {
     connectionHandler->sendLine(msg, '\n');
 }
@@ -163,14 +169,6 @@ vector<string> serverHandler::parseByLine(string message) {
     while (std::getline(ss, line, '\n')) {
         results.push_back(line);
     }
-    return results;
-}
-
-
-vector<string> serverHandler::parseBySpace(string message) {
-    std::istringstream iss(message);
-    vector<string> results(istream_iterator<string>{iss},
-                           istream_iterator<string>());
     return results;
 }
 
