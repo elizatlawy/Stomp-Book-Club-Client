@@ -121,7 +121,8 @@ void keyboardHandler::processJoin(vector<string> &userInputVector) {
                         + string("id:") + subscriptionId + '\n'
                         + string("receipt:") + receiptId + '\n';
         sendMessage(output);
-    }
+    } else
+        cout << "you are already subscribed to this topic" << endl;
 }
 
 void keyboardHandler::processAdd(vector<string> &userInputVector) {
