@@ -134,7 +134,6 @@ void UserData::setLoginLock(bool loginLock) {
     UserData::loginLock = loginLock;
 }
 
-UserData::~UserData() {}
 
 string UserData::getSubscriptionLogById(string receiptId) {
     return subscriptionsLogById.at(receiptId);
