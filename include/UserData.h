@@ -41,6 +41,10 @@ public:
     bool isLoginLock() const;
     void setLoginLock(bool loginLock);
 
+    bool isLogOutLock() const;
+
+    void setLogOutLock(bool logOutLock);
+
     string getSubscriptionLogById(string receiptId);
     void addSubscriptionLogById(string receiptId, string topic);
     void removeSubscriptionLogById(string receiptId);
@@ -60,6 +64,7 @@ private:
     int subscriptionId;
     int receiptId;
     bool loginLock = true;
+    bool logOutLock = false;
     string disconnectReceiptId;
     unordered_map<std::string,std::vector<Book*>> inventory;
     vector<string> wishList; // vector of wished book names

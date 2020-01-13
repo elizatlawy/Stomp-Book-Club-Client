@@ -53,7 +53,9 @@ void keyboardHandler::run() {
                 processStatus(userInputVector);
             } else if (userInputVector[0] == "logout") {
                 processLogOut();
+                userData->setLogOutLock(true);
             }
+            while(userData->isLogOutLock()){}
         }
         serverHandlerThread->join();
         cout << "you have been DISCONNECTED, bye bye..." << endl;

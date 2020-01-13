@@ -30,6 +30,7 @@ void serverHandler::run() {
             if (receiptId == userData->getDisconnectReceiptId()) {
                 userData->setLoginLock(false);
                 userData->logout();
+                userData->setLogOutLock(false);
                 // TODO: check if needed
                 connectionHandler->close();
             } else if (userData->getCommand(receiptId) == "SUBSCRIBE") {
@@ -66,7 +67,6 @@ void serverHandler::messageExecutor(string topic, string msgBody) {
         //cout << "Client FINISHED process: " + msgBody << endl;
 
     }
-
         // message type is {User} has {bookName} or  {User} has added the book
     else if (msgBody.find(" has ") != string::npos) {
         //cout << "Client STARTED process:" + msgBody << endl;

@@ -155,6 +155,14 @@ string UserData::getSubscriptionsLogByTopic(string topic) {
     return  subscriptionsLogByTopic.at(topic);
 }
 
+bool UserData::isLogOutLock() const {
+    return logOutLock;
+}
+
+void UserData::setLogOutLock(bool logOutLock) {
+    UserData::logOutLock = logOutLock;
+}
+
 
 
 
