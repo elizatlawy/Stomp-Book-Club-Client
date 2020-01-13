@@ -164,6 +164,7 @@ void keyboardHandler::processReturn(vector<string> &userInputVector) {
                         + string("destination:") + topic + '\n' + '\n'
                         + msgBody + '\n' + '\0';
         sendMessage(output);
+        userData->changeBookAvailability(topic, bookName,false);
     }
 }
 
