@@ -126,7 +126,7 @@ void serverHandler::takeBookExecutor(string topic, string msgBody) {
         string bookName = msgBody.substr(7, end - 8);
         userData->changeBookAvailability(topic, bookName, false);
     }
-}
+} //
 
 void serverHandler::returnBookExecutor(string topic, string msgBody) {
     string toReturnName = msgBody.substr(msgBody.find_last_of(' ') + 1);
