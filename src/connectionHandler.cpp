@@ -23,8 +23,8 @@ bool ConnectionHandler::connect() {
 		boost::system::error_code error;
 		socket_.connect(endpoint, error);
 		if (error)
-			throw boost::system::system_error(error);
-
+			//throw boost::system::system_error(error);
+            std::cout << "Connection failed, Please try to reconnect" << endl;
     }
     catch (std::exception& e) {
         std::cerr << "Connection failed (Error: " << e.what() << ')' << std::endl;
@@ -42,7 +42,8 @@ bool ConnectionHandler::getBytes(char bytes[], unsigned int bytesToRead) {
 			tmp += socket_.read_some(boost::asio::buffer(bytes+tmp, bytesToRead-tmp), error);			
         }
 		if(error)
-			throw boost::system::system_error(error);
+            std::cout << "Connection failed, Please try to reconnect" << endl;
+			//throw boost::system::system_error(error);
     } catch (std::exception& e) {
         std::cerr << "recv failed (Error: " << e.what() << ')' << std::endl;
         return false;
@@ -58,7 +59,9 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
 			tmp += socket_.write_some(boost::asio::buffer(bytes + tmp, bytesToWrite - tmp), error);
         }
 		if(error)
-			throw boost::system::system_error(error);
+		    // TODO: check how to disconnect gracefully
+            std::cout << "Connection failed, Please try to reconnect" << endl;
+			//throw boost::system::system_error(error);
     } catch (std::exception& e) {
         std::cerr << "recv failed (Error: " << e.what() << ')' << std::endl;
         return false;
