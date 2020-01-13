@@ -110,7 +110,7 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
         string senderName = msgBody.substr(0, msgBody.find(' '));
         string msg = string("SEND") + '\n'
                      + string("destination:") + topic + '\n' + '\n'
-                     + string("Taking") + bookName + string("from") + senderName + '\n' + '\0';
+                     + string("Taking ") + bookName + string(" from ") + senderName + '\n' + '\0';
         Book *borrowedBook = new Book(bookName, senderName, true);
         userData->addBook(topic, *borrowedBook);
         userData->removeFromWishList(bookName);
