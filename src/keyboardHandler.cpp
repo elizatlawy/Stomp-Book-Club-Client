@@ -35,7 +35,11 @@ void keyboardHandler::run() {
                     while (userData->isLoginLock()) {}
                 } else
                     cout << "Could not connect to the server" << endl;
-            } else
+            }
+            else if(userInputVector[0] == "bye"){
+                terminate();
+            }
+            else
                 cout << "you are not logged in, please login first" << endl;
         } // end of first while
         // user is now logged in
@@ -60,6 +64,11 @@ void keyboardHandler::run() {
             } else if (userInputVector[0] == "logout") {
                 processLogOut();
                 userData->setLogOutLock(true);
+            } else if(userInputVector[0] == "bye"){
+                if(userData->isLoggedIn())
+                    cout << "in order to exit the program, please logout first" << endl;
+                else
+                    terminate();
             }
             while(userData->isLogOutLock()){}
         }

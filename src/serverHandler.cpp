@@ -16,9 +16,7 @@ serverHandler::~serverHandler() {}
 
 void serverHandler::run() {
     while (connectionHandler->isConnected()) {
-        // TODO: MAKE ALL IF AS FUNCTIONS
         string message;
-        string topic;
         connectionHandler->getLine(message, '\0');
         vector<std::string> serverOutputMessage = parseByLine(message);
         if (serverOutputMessage[0] == "CONNECTED") {
@@ -32,7 +30,7 @@ void serverHandler::run() {
         } else if (serverOutputMessage[0] == "MESSAGE") {
             string msgBody = serverOutputMessage[5];
             cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
-            topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
+            string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
             handleMessageFrame(topic, msgBody);
         }
     }
@@ -127,22 +125,17 @@ void serverHandler::bookStatusExecutor(string topic) {
     sendMessage(msg);
 }
 
-
-
 void serverHandler::handleConnectedFrame() {
     userData->logIn();
     userData->setLoginLock(false);
     cout << "Login successful" << endl;
-
 }
 
 void serverHandler::handleReceiptFrame(string receiptId) {
     if (receiptId == userData->getDisconnectReceiptId()) {
-        userData->setLoginLock(false);
         userData->logout();
         userData->setLogOutLock(false);
-        // TODO: check if needed
-        connectionHandler->close();
+        delete connectionHandler;
     } else if (userData->getCommand(receiptId) == "SUBSCRIBE") {
         cout << string("Joined club ") + userData->getSubscriptionLogById(receiptId) << endl;
     } else { // the command "UNSUBSCRIBE"

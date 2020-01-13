@@ -28,6 +28,9 @@ void UserData::logIn() {
 
 void UserData::logout() {
     loggedIn = false;
+    subscriptionsLogById.clear();
+    subscriptionsLogByTopic.clear();
+    commandLog.clear();
 }
 
 bool UserData::isLoggedIn() {
@@ -185,5 +188,6 @@ string UserData::getBookOwner(string topic, string bookName) {
         }
     }
 }
+
 
 
