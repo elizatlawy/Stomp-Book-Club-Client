@@ -210,6 +210,6 @@ string keyboardHandler::createBookName(vector<string> &userInputVector) {
     for (int i = 2 ; i < userInputVector.size() ; i++){
         bookName = string(bookName) + string(userInputVector[i]) + string( " ");
     }
-    bookName.substr(0, bookName.length()-1);
+    bookName = bookName.substr(0, bookName.length()-1);
     return bookName;
 }
