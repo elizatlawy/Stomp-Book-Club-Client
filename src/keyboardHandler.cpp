@@ -108,18 +108,20 @@ void keyboardHandler::processLogin(vector<string> &userInputVector) {
 void keyboardHandler::processJoin(vector<string> &userInputVector) {
     // add to subscriptionsLogById
     string topic = userInputVector[1];
-    string receiptId = to_string(userData->incrementAndGetReceiptCounter());
-    string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
-    userData->addSubscriptionLogById(receiptId, topic);
-    userData->addCommandLog(receiptId, "SUBSCRIBE");
-    userData->addSubscriptionsLogByTopic(topic, subscriptionId);
-    // decode msg
-    userData->addSubscriptionsLogByTopic(topic, subscriptionId);
-    string output = string("SUBSCRIBE") + '\n'
-                    + string("destination:") + topic + '\n'
-                    + string("id:") + subscriptionId + '\n'
-                    + string("receipt:") + receiptId + '\n' + '\0';
-    sendMessage(output);
+    if(!userData->isSubscribed(topic)){
+        string receiptId = to_string(userData->incrementAndGetReceiptCounter());
+        string subscriptionId = to_string(userData->incrementAndGetSubscriptionCounter());
+        userData->addSubscriptionLogById(receiptId, topic);
+        userData->addCommandLog(receiptId, "SUBSCRIBE");
+        userData->addSubscriptionsLogByTopic(topic, subscriptionId);
+        userData->addTopic(topic);
+        // decode msg
+        string output = string("SUBSCRIBE") + '\n'
+                        + string("destination:") + topic + '\n'
+                        + string("id:") + subscriptionId + '\n'
+                        + string("receipt:") + receiptId + '\n' + '\0';
+        sendMessage(output);
+    }
 }
 
 void keyboardHandler::processAdd(vector<string> &userInputVector) {

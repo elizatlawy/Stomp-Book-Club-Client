@@ -12,12 +12,11 @@ UserData::UserData()
 UserData::~UserData() {
     auto it = inventory.begin();
     while (it != inventory.end()) {
-        while (it != inventory.end()) {
-            vector <Book*> currTopic = it->second;
-            for (Book* currBook : currTopic){
-                delete currBook;
-            }
+        vector<Book *> currTopic = it->second;
+        for (Book *currBook : currTopic) {
+            delete currBook;
         }
+        it++;
     }
 }
 
@@ -186,6 +185,23 @@ string UserData::getBookOwner(string topic, string bookName) {
                 return currBook->getBookOwner();
         }
     }
+}
+
+void UserData::addTopic(string topic) {
+    if (inventory.find(topic) == inventory.end()) {
+        inventory.insert(make_pair(topic, vector<Book *>()));
+    }
+}
+
+bool UserData::isSubscribed(string topic) {
+    auto it = subscriptionsLogByTopic.begin();
+    while (it != subscriptionsLogByTopic.end()) {
+        string currTopic = it->first;
+        if(currTopic == topic)
+            return true;
+        it++;
+    }
+    return false;
 }
 
 

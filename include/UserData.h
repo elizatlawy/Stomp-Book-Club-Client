@@ -28,6 +28,7 @@ public:
     int incrementAndGetSubscriptionCounter();
     int incrementAndGetReceiptCounter();
     void addBook (string topic, Book& book);
+    void addTopic(string topic);
     bool isAvailableBook (string topic, const string& requestedBookName);
     void changeBookAvailability(string topic, const string& requestedBookName, bool status);
     const vector<string> &getWishList() const;
@@ -49,6 +50,7 @@ public:
     void addCommandLog(string receiptId, string command);
     string getCommand(string receiptId );
     string getBookOwner (string topic, string bookName);
+    bool isSubscribed(string topic);
 
 
 private:
