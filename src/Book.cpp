@@ -19,6 +19,6 @@ bool Book::isAvailable() const {
 
 void Book::setAvailable(bool isAvailable) {
     Book::available = isAvailable;
-}
+} //
 
 
