@@ -16,62 +16,62 @@ void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         string message;
         connectionHandler->getLine(message, '\0');
-        if (message != "") {
-            vector<std::string> serverOutputMessage = parseByLine(message);
-            if (serverOutputMessage[0] == "CONNECTED") {
-                userData->logIn();
-                cout << "Login successful" << endl;
-            } else if (serverOutputMessage[0] == "RECEIPT") {
-                string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-                // prints to the screen
-                // if it is the answer of the disconnect message logout
-                if (receiptId == userData->getDisconnectReceiptId()) {
-                    userData->logout();
-                    // TODO: check if needed
-                    connectionHandler->close();
-                } else {
-                    cout << userData->getOutputMessage(receiptId) << endl;
-                }
-            } else if (serverOutputMessage[0] == "ERROR") {
-                string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-                string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
-                cout << errorMessage << endl;
-            } else if (serverOutputMessage[0] == "MESSAGE") {
-                cout << "Client Received MESSAGE from Server" << endl;
-                string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
-                string msgBody = serverOutputMessage[5];
-                messageExecutor(topic, msgBody);
+        vector<std::string> serverOutputMessage = parseByLine(message);
+        if (serverOutputMessage[0] == "CONNECTED") {
+            userData->logIn();
+            cout << "Login successful" << endl;
+        } else if (serverOutputMessage[0] == "RECEIPT") {
+            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
+            // prints to the screen
+            // if it is the answer of the disconnect message logout
+            if (receiptId == userData->getDisconnectReceiptId()) {
+                userData->logout();
+                // TODO: check if needed
+                connectionHandler->close();
+            } else {
+                cout << userData->getOutputMessage(receiptId) << endl;
             }
+        } else if (serverOutputMessage[0] == "ERROR") {
+            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
+            string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
+            cout << errorMessage << endl;
+        } else if (serverOutputMessage[0] == "MESSAGE") {
+            string msgBody = serverOutputMessage[5];
+            cout << "Client Received MESSAGE from Server: " + msgBody << endl;
+            string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
+
+            messageExecutor(topic, msgBody);
         }
     }
+
 }
 
 void serverHandler::messageExecutor(string topic, string msgBody) {
     // message type is wish to borrow
     if (msgBody.find("wish to borrow") != string::npos) {
-        cout << "Client STARTED process: wish to borrow " << endl;
+        cout << "Client STARTED process: " + msgBody << endl;
         wishBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process: wish to borrow " << endl;
+        cout << "Client FINISHED process: " + msgBody << endl;
 
     }
 
         // message type is {User} has {bookName} or  {User} has added the book
     else if (msgBody.find(" has ") != string::npos) {
-        cout << "Client STARTED process: HAS " << endl;
+        cout << "Client STARTED process:" + msgBody << endl;
         hasBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process: HAS " << endl;
+        cout << "Client FINISHED process:" + msgBody << endl;
     } else if (msgBody.find(" Taking ") != string::npos) {
-        cout << "Client STARTED process: Taking " << endl;
+        cout << "Client STARTED process:" + msgBody << endl;
         takeBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process: Taking " << endl;
+        cout << "Client FINISHED process:" + msgBody << endl;
     } else if (msgBody.find("Returning") != string::npos) {
-        cout << "Client STARTED process: Returning " << endl;
+        cout << "Client STARTED process:" + msgBody << endl;
         returnBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process: Returning " << endl;
+        cout << "Client FINISHED process: " + msgBody << endl;
     } else if (msgBody.find("book status") != string::npos) {
-        cout << "Client STARTED process: book status " << endl;
+        cout << "Client STARTED process: " + msgBody << endl;
         bookStatusExecutor(topic);
-        cout << "Client FINISHED process: book status " << endl;
+        cout << "Client FINISHED process: " +  msgBody << endl;
     }
         // TODO: delete this before submission
         // else this is the  book status of other users message
@@ -106,13 +106,14 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
         sendMessage(msg);
     }
 }
+
 // TODO: handle the case of long book name with spaces
 void serverHandler::takeBookExecutor(string topic, string msgBody) {
     string toTakeFromName = msgBody.substr(msgBody.find_last_of(' ') + 1);
     if (toTakeFromName == userData->getUserName()) {
         int end = msgBody.find("from");
         int start = msgBody.find('Taking ');
-        string bookName = msgBody.substr(start+1,end-start-2);
+        string bookName = msgBody.substr(start + 1, end - start - 2);
         userData->changeBookAvailability(topic, bookName, false);
     }
 }
@@ -123,7 +124,7 @@ void serverHandler::returnBookExecutor(string topic, string msgBody) {
     if (toReturnName == userData->getUserName()) {
         int end = msgBody.find("to");
         int start = msgBody.find('Returning ');
-        string bookName = msgBody.substr(start+1,end-start-2);
+        string bookName = msgBody.substr(start + 1, end - start - 2);
         // but the book back to my inventory.
         userData->changeBookAvailability(topic, bookName, true);
     }

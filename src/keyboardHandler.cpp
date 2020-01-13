@@ -69,6 +69,7 @@ void keyboardHandler::run() {
             }
         }
         serverHandlerThread->join();
+        cout << "you have been DISCONNECTED, bye bye..." << endl;
     }
 }
 
