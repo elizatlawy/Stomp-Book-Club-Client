@@ -11,6 +11,12 @@ using namespace std;
 
 keyboardHandler::keyboardHandler() {}
 
+keyboardHandler::~keyboardHandler() {
+    delete connectionHandler;
+    delete serverHandlerThread;
+    delete userData;
+}
+
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
     vector<string> userInputVector;
@@ -206,3 +212,5 @@ string keyboardHandler::createBookName(vector<string> &userInputVector) {
     bookName = bookName.substr(0, bookName.length() - 1);
     return bookName;
 }
+
+

@@ -15,12 +15,13 @@ using namespace std;
 
 class keyboardHandler {
 public:
-    keyboardHandler();
+    keyboardHandler(); // constructor
+
+    virtual ~keyboardHandler(); // destructor
 
     void run();
 
 private:
-    // TODO:: make both connectionHandler & userData
     ConnectionHandler *connectionHandler;
     thread *serverHandlerThread;
     UserData *userData;

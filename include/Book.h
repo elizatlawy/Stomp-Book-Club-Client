@@ -1,6 +1,3 @@
-//
-// Created by zatlawy@wincs.cs.bgu.ac.il on 09/01/2020.
-//
 
 #ifndef BOOST_ECHO_CLIENT_BOOK_H
 #define BOOST_ECHO_CLIENT_BOOK_H
@@ -12,6 +9,8 @@ using namespace std;
 class Book {
 public:
     Book(const string &bookName, const string &bookOwner, bool available); // constructor
+
+    virtual ~Book(); // destructor
 
     const string &getBookName() const;
 
@@ -26,6 +25,5 @@ private:
     bool available;
 
 };
-
 
 #endif //BOOST_ECHO_CLIENT_BOOK_H

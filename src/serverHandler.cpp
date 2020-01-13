@@ -12,6 +12,8 @@ using namespace std;
 serverHandler::serverHandler(ConnectionHandler &connectionHandler, UserData &userData) : connectionHandler(
         &connectionHandler), userData(&userData) {}
 
+serverHandler::~serverHandler() {}
+
 void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         // TODO: MAKE ALL IF AS FUNCTIONS
@@ -171,6 +173,8 @@ vector<string> serverHandler::parseBySpace(string message) {
                            istream_iterator<string>());
     return results;
 }
+
+
 
 
 

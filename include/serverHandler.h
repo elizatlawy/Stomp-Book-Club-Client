@@ -11,7 +11,10 @@
 
 class serverHandler {
 public:
-    serverHandler(ConnectionHandler &connectionHandler, UserData &userData);
+    serverHandler(ConnectionHandler &connectionHandler, UserData &userData); // constructor
+
+    virtual ~serverHandler(); // destructor
+
     void run();
 
 private:
@@ -26,12 +29,6 @@ private:
     void takeBookExecutor(string topic, string msgBody);
     void returnBookExecutor(string topic, string msgBody);
     void bookStatusExecutor(string topic);
-
-
-
-
-
-
 
 };
 

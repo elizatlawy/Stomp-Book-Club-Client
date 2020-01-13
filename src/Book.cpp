@@ -1,11 +1,9 @@
-//
-// Created by zatlawy@wincs.cs.bgu.ac.il on 09/01/2020.
-//
 
 #include "Book.h"
 
-Book::Book(const string &bookName, const string &bookOwner, bool isAvailable) : bookName(bookName), bookOwner(bookOwner),
-                                                                             available(isAvailable) {}
+Book::Book(const string &bookName, const string &bookOwner, bool isAvailable) : bookName(bookName), bookOwner(bookOwner),available(isAvailable) {}
+
+Book::~Book() {}
 
 const string &Book::getBookName() const {
     return bookName;
@@ -22,3 +20,5 @@ bool Book::isAvailable() const {
 void Book::setAvailable(bool isAvailable) {
     Book::available = isAvailable;
 }
+
+

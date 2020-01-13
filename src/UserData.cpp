@@ -9,6 +9,18 @@ UserData::UserData()
         : loggedIn(false), subscriptionId(0), receiptId(0), disconnectReceiptId("-1"), subscriptionsLogById(),
           inventory(), wishList() {}
 
+UserData::~UserData() {
+    auto it = inventory.begin();
+    while (it != inventory.end()) {
+        while (it != inventory.end()) {
+            vector <Book*> currTopic = it->second;
+            for (Book* currBook : currTopic){
+                delete currBook;
+            }
+        }
+    }
+}
+
 void UserData::logIn() {
     loggedIn = true;
 
@@ -47,11 +59,6 @@ int UserData::incrementAndGetReceiptCounter() {
     receiptId++;
     return receiptId;
 }
-
-string UserData::getOutputMessage(string receipt) {
-    return subscriptionsLogById.at(receipt);
-}
-
 
 void UserData::addBook(string topic, Book &book) {
     // topic is not found in inventory

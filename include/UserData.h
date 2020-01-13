@@ -14,7 +14,7 @@ class UserData {
 public:
     UserData(); // constructor
 
-    virtual ~UserData();
+    virtual ~UserData(); // destructor
 
     const string &getUserName() const;
 
@@ -27,7 +27,6 @@ public:
     void logout();
     int incrementAndGetSubscriptionCounter();
     int incrementAndGetReceiptCounter();
-    string getOutputMessage(string receiptId);
     void addBook (string topic, Book& book);
     bool isAvailableBook (string topic, const string& requestedBookName);
     void changeBookAvailability(string topic, const string& requestedBookName, bool status);
@@ -37,25 +36,18 @@ public:
     string getDisconnectReceiptId() const;
     void setDisconnectReceiptId(string disconnectReceiptId);
     string listOfAvailableBooksByTopic(string topic);
-
     bool isLoginLock() const;
     void setLoginLock(bool loginLock);
-
     bool isLogOutLock() const;
-
     void setLogOutLock(bool logOutLock);
-
     string getSubscriptionLogById(string receiptId);
     void addSubscriptionLogById(string receiptId, string topic);
     void removeSubscriptionLogById(string receiptId);
-
     void addSubscriptionsLogByTopic(string topic, string subscriptionId);
     void removeSubscriptionsLogByTopic(string topic);
     string getSubscriptionsLogByTopic(string topic);
-
     void addCommandLog(string receiptId, string command);
     string getCommand(string receiptId );
-
     string getBookOwner (string topic, string bookName);
 
 
@@ -74,11 +66,7 @@ private:
     unordered_map<string,string> subscriptionsLogById; // key: receiptId value: topic name
     unordered_map<string,string> commandLog; // key: receiptId value: command name
 
-
-
 };
-
-
 
 
 #endif //BOOST_ECHO_CLIENT_USERDATA_H
