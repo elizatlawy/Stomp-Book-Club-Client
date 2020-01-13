@@ -205,10 +205,9 @@ vector<string> keyboardHandler::parseBySpace(string lastUserInput) {
 };
 
 string keyboardHandler::createBookName(vector<string> &userInputVector) {
-    // todo fix
     string bookName = "";
     for (int i = 2 ; i < userInputVector.size() ; i++){
-        string bookName = bookName + userInputVector[i] + " ";
+        bookName = string(bookName) + string(userInputVector[i]) + string( " ");
     }
     bookName.substr(0, bookName.length()-1);
     return bookName;

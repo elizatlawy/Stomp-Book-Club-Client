@@ -5,12 +5,12 @@
 
 using namespace std;
 
-//int main() {
-//    keyboardHandler* keyboardHandler_ =  new keyboardHandler();
-//    keyboardHandler_->run();
-//
-//    return 0;
-//}
+int main() {
+    keyboardHandler* keyboardHandler_ =  new keyboardHandler();
+    keyboardHandler_->run();
+
+    return 0;
+}
 
 
 
