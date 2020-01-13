@@ -72,7 +72,7 @@ void serverHandler::wishBookExecutor(string topic, string msgBody) {
     if (userData->isAvailableBook(topic, bookName)) { // if the user have the requested Book
         string msg = string("SEND") + '\n'
                      + string("destination:") + topic + '\n' + '\n'
-                     + userData->getUserName() + (" ") + string("has ") + bookName + '\n' + '\0';
+                     + userData->getUserName() + (" ") + string("has ") + bookName + '\n';
         sendMessage(msg);
     }
 }
@@ -86,7 +86,7 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
         string senderName = msgBody.substr(0, msgBody.find(' '));
         string msg = string("SEND") + '\n'
                      + string("destination:") + topic + '\n' + '\n'
-                     + string("Taking ") + bookName + string(" from ") + senderName + '\n' + '\0';
+                     + string("Taking ") + bookName + string(" from ") + senderName + '\n';
         Book *borrowedBook = new Book(bookName, senderName, true);
         userData->addBook(topic, *borrowedBook);
         userData->removeFromWishList(bookName);
@@ -121,7 +121,7 @@ void serverHandler::bookStatusExecutor(string topic) {
     // send the message
     string msg = string("SEND") + '\n'
                  + string("destination:") + topic + '\n' + '\n'
-                 + userData->getUserName() + (":") + bookList + '\n' + '\0';
+                 + userData->getUserName() + (":") + bookList + '\n';
     sendMessage(msg);
 }
 
@@ -152,7 +152,7 @@ void serverHandler::handleErrorFrame(string errorMessage) {
     cout << errorMessage << endl;
 }
 void serverHandler::sendMessage(string msg) {
-    connectionHandler->sendLine(msg, '\n');
+    connectionHandler->sendLine(msg, '\0');
 }
 
 vector<string> serverHandler::parseByLine(string message) {

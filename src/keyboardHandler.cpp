@@ -101,7 +101,7 @@ void keyboardHandler::processLogin(vector<string> &userInputVector) {
                     + string("accept-version:1.2") + '\n'
                     + string("host:stomp.cs.bg.ac.il") + '\n'
                     + string("login:") + userData->getUserName() + '\n'
-                    + string("passcode:") + userData->getUserPassword() + '\n' + '\0';
+                    + string("passcode:") + userData->getUserPassword() + '\n';
     sendMessage(output);
 }
 
@@ -119,7 +119,7 @@ void keyboardHandler::processJoin(vector<string> &userInputVector) {
         string output = string("SUBSCRIBE") + '\n'
                         + string("destination:") + topic + '\n'
                         + string("id:") + subscriptionId + '\n'
-                        + string("receipt:") + receiptId + '\n' + '\0';
+                        + string("receipt:") + receiptId + '\n';
         sendMessage(output);
     }
 }
@@ -136,7 +136,7 @@ void keyboardHandler::processAdd(vector<string> &userInputVector) {
         string msgBody = userName + " has added the book " + bookName;
         string output = string("SEND") + '\n'
                         + string("destination:") + topic + '\n' + '\n'
-                        + msgBody + '\n' + '\0';
+                        + msgBody + '\n';
         sendMessage(output);
     }
 }
@@ -152,7 +152,7 @@ void keyboardHandler::processExit(vector<string> &userInputVector) {
     // decode msg
     string output = string("UNSUBSCRIBE") + '\n'
                     + string("id:") + subscriptionId + '\n'
-                    + string("receipt:") + receiptId + '\n' + '\0';
+                    + string("receipt:") + receiptId + '\n';
     sendMessage(output);
 }
 
@@ -166,7 +166,7 @@ void keyboardHandler::processBorrow(vector<string> &userInputVector) {
     string msgBody = userName + " wish to borrow " + bookName;
     string output = string("SEND") + '\n'
                     + string("destination:") + topic + '\n' + '\n'
-                    + msgBody + '\n' + '\0';
+                    + msgBody + '\n';
     sendMessage(output);
 }
 
@@ -179,7 +179,7 @@ void keyboardHandler::processReturn(vector<string> &userInputVector) {
         string msgBody = "Returning " + bookName + " to " + ownerName;
         string output = string("SEND") + '\n'
                         + string("destination:") + topic + '\n' + '\n'
-                        + msgBody + '\n' + '\0';
+                        + msgBody + '\n';
         sendMessage(output);
         userData->changeBookAvailability(topic, bookName,false);
     }
@@ -191,7 +191,7 @@ void keyboardHandler::processStatus(vector<string> &userInputVector) {
     string msgBody = "book status";
     string output = string("SEND") + '\n'
                     + string("destination:") + topic + '\n' + '\n'
-                    + msgBody + '\n' + '\0';
+                    + msgBody + '\n';
     sendMessage(output);
 }
 
@@ -200,12 +200,12 @@ void keyboardHandler::processLogOut() {
     string receiptId = to_string(userData->incrementAndGetReceiptCounter());
     userData->setDisconnectReceiptId(receiptId);
     string output = string("DISCONNECT") + '\n'
-                    + string("receipt:") + receiptId + '\n' + '\0';
+                    + string("receipt:") + receiptId + '\n';
     sendMessage(output);
 }
 
 void keyboardHandler::sendMessage(string msg) {
-    connectionHandler->sendLine(msg, '\n');
+    connectionHandler->sendLine(msg, '\0');
 }
 
 vector<string> keyboardHandler::parseBySpace(string lastUserInput) {
