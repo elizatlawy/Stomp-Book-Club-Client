@@ -2,8 +2,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <iterator>
-#include <include/Book.h>
+#include <Book.h>
 #include "serverHandler.h"
 
 
@@ -18,7 +17,7 @@ void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         string message;
         connectionHandler->getLine(message);
-        if(message != ""){
+        if (message != "") {
             vector<std::string> serverOutputMessage = parseByLine(message);
             if (serverOutputMessage[0] == "CONNECTED") {
                 handleConnectedFrame();
@@ -47,11 +46,8 @@ void serverHandler::handleMessageFrame(string topic, string msgBody) {
         cout << "Client FINISHED process: " + msgBody << endl;
     }
         // message type is {User} has {bookName} or  {User} has added the book
-    else if (msgBody.find("has") != string::npos) {
-        cout << "Client STARTED process:" + msgBody << endl;
-        hasBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process:" + msgBody << endl;
-    } else if (msgBody.find("Taking") != string::npos) {
+
+    else if (msgBody.find("Taking") != string::npos) {
         cout << "Client STARTED process:" + msgBody << endl;
         takeBookExecutor(topic, msgBody);
         cout << "Client FINISHED process:" + msgBody << endl;
@@ -63,6 +59,10 @@ void serverHandler::handleMessageFrame(string topic, string msgBody) {
         cout << "Client STARTED process: " + msgBody << endl;
         bookStatusExecutor(topic);
         cout << "Client FINISHED process: " + msgBody << endl;
+    } else if (msgBody.find("has added") == string::npos) {
+        cout << "Client STARTED process:" + msgBody << endl;
+        hasBookExecutor(topic, msgBody);
+        cout << "Client FINISHED process:" + msgBody << endl;
     }
         // TODO: delete this before submission
         // else this is the  book status of other users message
@@ -158,6 +158,7 @@ void serverHandler::handleErrorFrame(string errorMessage) {
     userData->setLogOutLock(false);
     userData->setLoginLock(false);
 }
+
 void serverHandler::sendMessage(string msg) {
     connectionHandler->sendLine(msg);
 }

@@ -15,14 +15,14 @@ add_executable(Boost_Echo_Client
         include/connectionHandler.h
         include/keyboardHandler.h
         include/serverHandler.h
-        include/StompBookClubClient.h
+        include/ClientRunner.h
         include/UserData.h
         include/Book.h
         src/connectionHandler.cpp
         src/keyboardHandler.cpp
         src/serverHandler.cpp
         src/echoClient.cpp
-        src/StompBookClubClient.cpp
+        src/ClientRunner.cpp
         src/main.cpp
         src/UserData.cpp
         src/Book.cpp
@@ -31,12 +31,12 @@ add_executable(Boost_Echo_Client
 
 #add_executable(Boost_Echo_Client
 #        include/connectionHandler.h
-#        include/StompBookClubClient.h
+#        include/ClientRunner.h
 #        include/UserData.h
 #        include/Book.h
 #        src/connectionHandler.cpp
 #        src/echoClient.cpp
-#        src/StompBookClubClient.cpp
+#        src/ClientRunner.cpp
 #        src/main.cpp
 #        src/UserData.cpp
 #        src/Book.cpp
