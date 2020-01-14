@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <Book.h>
+#include <sstream>
 #include "serverHandler.h"
 
 
@@ -163,6 +164,8 @@ void serverHandler::handleErrorFrame(string errorMessage) {
 
 void serverHandler::sendMessage(string msg) {
     if (!connectionHandler->sendLine(msg)) {
+        connectionHandler->close();
+        userData->logout();
         std::cout << "Failed to send message, connection lost\n" << std::endl;
     }
 }

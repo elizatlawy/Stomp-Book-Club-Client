@@ -5,6 +5,7 @@
 #include <Book.h>
 #include "keyboardHandler.h"
 #include <thread>
+#include <sstream>
 #include "serverHandler.h"
 
 using namespace std;
@@ -19,7 +20,7 @@ keyboardHandler::keyboardHandler(): connectionHandler(), userData(), serverHandl
 keyboardHandler::~keyboardHandler() {
     delete connectionHandler;
     serverHandlerThread->join();
-    delete serverHandlerThread; // TODO: check if need to delete each time
+    delete serverHandlerThread;
     delete serverHandler_;
     delete userData;
 }
@@ -212,6 +213,8 @@ void keyboardHandler::processLogOut() {
 
 void keyboardHandler::sendMessage(string msg) {
     if (!connectionHandler->sendLine(msg)) {
+        connectionHandler->close();
+        userData->logout();
         std::cout << "Failed to send message, connection lost\n" << std::endl;
     }
 }
