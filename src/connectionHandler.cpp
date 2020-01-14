@@ -23,8 +23,8 @@ bool ConnectionHandler::connect() {
 		boost::system::error_code error;
 		socket_.connect(endpoint, error);
 		if (error)
-			//throw boost::system::system_error(error);
-            std::cout << "Connection failed, Please try to reconnect" << endl;
+			throw boost::system::system_error(error);
+
     }
     catch (std::exception& e) {
         std::cerr << "Connection failed (Error: " << e.what() << ')' << std::endl;
@@ -42,8 +42,7 @@ bool ConnectionHandler::getBytes(char bytes[], unsigned int bytesToRead) {
 			tmp += socket_.read_some(boost::asio::buffer(bytes+tmp, bytesToRead-tmp), error);			
         }
 		if(error)
-            std::cout << "Connection failed, Please try to reconnect" << endl;
-			//throw boost::system::system_error(error);
+			throw boost::system::system_error(error);
     } catch (std::exception& e) {
         std::cerr << "recv failed (Error: " << e.what() << ')' << std::endl;
         return false;
@@ -59,9 +58,7 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
 			tmp += socket_.write_some(boost::asio::buffer(bytes + tmp, bytesToWrite - tmp), error);
         }
 		if(error)
-		    // TODO: check how to disconnect gracefully
-            std::cout << "Connection failed, Please try to reconnect" << endl;
-			//throw boost::system::system_error(error);
+			throw boost::system::system_error(error);
     } catch (std::exception& e) {
         std::cerr << "recv failed (Error: " << e.what() << ')' << std::endl;
         return false;
@@ -69,12 +66,12 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
     return true;
 }
  
-bool ConnectionHandler::getLine(std::string& line, char delimiter) {
-    return getFrameAscii(line, delimiter);
+bool ConnectionHandler::getLine(std::string& line) {
+    return getFrameAscii(line, '\0');
 }
 
-bool ConnectionHandler::sendLine(std::string& line, char delimiter) {
-    return sendFrameAscii(line, delimiter);
+bool ConnectionHandler::sendLine(std::string& line) {
+    return sendFrameAscii(line, '\n');
 }
  
 

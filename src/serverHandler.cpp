@@ -17,22 +17,25 @@ serverHandler::~serverHandler() {}
 void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         string message;
-        connectionHandler->getLine(message, '\0');
-        vector<std::string> serverOutputMessage = parseByLine(message);
-        if (serverOutputMessage[0] == "CONNECTED") {
-            handleConnectedFrame();
-        } else if (serverOutputMessage[0] == "RECEIPT") {
-            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-            handleReceiptFrame(receiptId);
-        } else if (serverOutputMessage[0] == "ERROR") {
-            string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
-            handleErrorFrame(errorMessage);
-        } else if (serverOutputMessage[0] == "MESSAGE") {
-            string msgBody = serverOutputMessage[5];
-            cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
-            string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
-            handleMessageFrame(topic, msgBody);
-        }
+        connectionHandler->getLine(message);
+        if(message != ""){
+            vector<std::string> serverOutputMessage = parseByLine(message);
+            if (serverOutputMessage[0] == "CONNECTED") {
+                handleConnectedFrame();
+            } else if (serverOutputMessage[0] == "RECEIPT") {
+                string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
+                handleReceiptFrame(receiptId);
+            } else if (serverOutputMessage[0] == "ERROR") {
+                string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
+                handleErrorFrame(errorMessage);
+            } else if (serverOutputMessage[0] == "MESSAGE") {
+                string msgBody = serverOutputMessage[5];
+                cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
+                string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
+                handleMessageFrame(topic, msgBody);
+            }
+        } else
+            cout << "Client received empty string" << endl;
     }
 }
 
@@ -72,7 +75,7 @@ void serverHandler::wishBookExecutor(string topic, string msgBody) {
     if (userData->isAvailableBook(topic, bookName)) { // if the user have the requested Book
         string msg = string("SEND") + '\n'
                      + string("destination:") + topic + '\n' + '\n'
-                     + userData->getUserName() + (" ") + string("has ") + bookName + '\n';
+                     + userData->getUserName() + (" ") + string("has ") + bookName + '\n' + '\0';
         sendMessage(msg);
     }
 }
@@ -86,7 +89,7 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
         string senderName = msgBody.substr(0, msgBody.find(' '));
         string msg = string("SEND") + '\n'
                      + string("destination:") + topic + '\n' + '\n'
-                     + string("Taking ") + bookName + string(" from ") + senderName + '\n';
+                     + string("Taking ") + bookName + string(" from ") + senderName + '\n' + '\0';
         Book *borrowedBook = new Book(bookName, senderName, true);
         userData->addBook(topic, *borrowedBook);
         userData->removeFromWishList(bookName);
@@ -121,7 +124,7 @@ void serverHandler::bookStatusExecutor(string topic) {
     // send the message
     string msg = string("SEND") + '\n'
                  + string("destination:") + topic + '\n' + '\n'
-                 + userData->getUserName() + (":") + bookList + '\n';
+                 + userData->getUserName() + (":") + bookList + '\n' + '\0';
     sendMessage(msg);
 }
 
@@ -147,12 +150,14 @@ void serverHandler::handleReceiptFrame(string receiptId) {
 }
 
 void serverHandler::handleErrorFrame(string errorMessage) {
-    userData->setLoginLock(false);
+    connectionHandler->close();
     userData->logout();
     cout << errorMessage << endl;
+    userData->setLogOutLock(false);
+    userData->setLoginLock(false);
 }
 void serverHandler::sendMessage(string msg) {
-    connectionHandler->sendLine(msg, '\0');
+    connectionHandler->sendLine(msg);
 }
 
 vector<string> serverHandler::parseByLine(string message) {
@@ -164,7 +169,6 @@ vector<string> serverHandler::parseByLine(string message) {
     }
     return results;
 }
-
 
 
 

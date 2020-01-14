@@ -1,16 +1,13 @@
 
 #include "keyboardHandler.h"
-#include "../include/StompBookClubClient.h"
-#include <thread>
 
 using namespace std;
 
-// TODO: 1. check with valgrid
-// TODO: 2. handle the disconnect from server
-// TODO: 3. handle the bye from client
+// TODO: 1. check with valgrind
+// TODO: 2. handle the disconnect from server - socket close
 // TODO: 4. refactor the reactor
-// TODO: 5. check with multiple clients
-
+// TODO: 5. check with multiple clients - multiple borrow and multiple return
+// TODO: 6. synchronize sendLine
 
 
 
