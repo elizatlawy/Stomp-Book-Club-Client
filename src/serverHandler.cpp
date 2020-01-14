@@ -136,9 +136,10 @@ void serverHandler::handleConnectedFrame() {
 
 void serverHandler::handleReceiptFrame(string receiptId) {
     if (receiptId == userData->getDisconnectReceiptId()) {
+        connectionHandler->close();
         userData->logout();
         userData->setLogOutLock(false);
-        delete connectionHandler;
+        //delete connectionHandler;
     } else if (userData->getCommand(receiptId) == "SUBSCRIBE") {
         cout << string("Joined club ") + userData->getSubscriptionLogById(receiptId) << endl;
     } else { // the command "UNSUBSCRIBE"
@@ -151,6 +152,7 @@ void serverHandler::handleReceiptFrame(string receiptId) {
 
 void serverHandler::handleErrorFrame(string errorMessage) {
     connectionHandler->close();
+    //delete connectionHandler;
     userData->logout();
     cout << errorMessage << endl;
     userData->setLogOutLock(false);

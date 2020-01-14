@@ -9,16 +9,23 @@
 
 using namespace std;
 
-keyboardHandler::keyboardHandler() {}
+keyboardHandler::keyboardHandler(): connectionHandler(), userData() {
+    userData = new UserData;
+    connectionHandler = new ConnectionHandler();
+    serverHandler_  = new serverHandler(*connectionHandler, *userData);
+}
 
 keyboardHandler::~keyboardHandler() {
+    delete connectionHandler;
+    serverHandlerThread->join();
+    delete serverHandlerThread; // TODO: check if need to delete each time
+    delete serverHandler_;
     delete userData;
 }
 
 void keyboardHandler::run() {
     cout << "enter input:" << endl;
     vector<string> userInputVector;
-    userData = new UserData;
     // while user not logged in, he cant to do any command besides login
     bool flag = true;
     while (flag) {
@@ -79,10 +86,9 @@ bool keyboardHandler::establishConnection(vector<string> &userInputVector) {
     string input = userInputVector[1];
     string host = input.substr(0, input.find(':'));
     int port = stoi(input.substr(input.find(':') + 1, input.size()));
-    connectionHandler = new ConnectionHandler(host, short(port));
-    if (connectionHandler->connect()) {
+    if (connectionHandler->connect(host, short(port))) {
         // create serverHandler thread
-        serverHandler *serverHandler_ = new serverHandler(*connectionHandler, *userData);
+
         serverHandlerThread = new thread(&serverHandler::run, *serverHandler_);
         return true;
     }

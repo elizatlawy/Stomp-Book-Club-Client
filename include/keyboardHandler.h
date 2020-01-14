@@ -24,6 +24,7 @@ public:
 private:
     ConnectionHandler *connectionHandler;
     thread *serverHandlerThread;
+    serverHandler *serverHandler_;
     UserData *userData;
     bool establishConnection (vector<string> &userInputVector);
     void processLogin (vector<string> &userInputVector );

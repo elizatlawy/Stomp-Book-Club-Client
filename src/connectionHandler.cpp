@@ -8,14 +8,16 @@ using std::cerr;
 using std::endl;
 using std::string;
  
-ConnectionHandler::ConnectionHandler(string host, short port): host_(host), port_(port), io_service_(), socket_(io_service_), connected(
-        false) {}
+ConnectionHandler::ConnectionHandler(): host_(), port_(), io_service_(), socket_(io_service_), connected(
+        false), sendLineMutex() {}
     
 ConnectionHandler::~ConnectionHandler() {
     close();
 }
  
-bool ConnectionHandler::connect() {
+bool ConnectionHandler::connect(std::string host, short port) {
+    host_ = host;
+    port_ = port;
     std::cout << "Starting connect to " 
         << host_ << ":" << port_ << std::endl;
     try {
@@ -27,7 +29,7 @@ bool ConnectionHandler::connect() {
 
     }
     catch (std::exception& e) {
-        std::cerr << "Connection failed (Error: " << e.what() << ')' << std::endl;
+        //std::cerr << "Connection failed (Error: " << e.what() << ')' << std::endl;
         return false;
     }
     connected = true;
@@ -71,6 +73,7 @@ bool ConnectionHandler::getLine(std::string& line) {
 }
 
 bool ConnectionHandler::sendLine(std::string& line) {
+    std::lock_guard<std::mutex> lock(sendLineMutex);
     return sendFrameAscii(line, '\n');
 }
  

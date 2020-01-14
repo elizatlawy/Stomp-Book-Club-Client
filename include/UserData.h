@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <mutex>
 #include "Book.h"
 
 using namespace std;
@@ -67,6 +68,7 @@ private:
     unordered_map<string,string> subscriptionsLogByTopic; // key: topic name value: subscriptionId
     unordered_map<string,string> subscriptionsLogById; // key: receiptId value: topic name
     unordered_map<string,string> commandLog; // key: receiptId value: command name
+    std::mutex addBookMutex;
 
 };
 

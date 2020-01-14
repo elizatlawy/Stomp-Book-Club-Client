@@ -7,7 +7,7 @@
 
 UserData::UserData()
         : loggedIn(false), subscriptionId(0), receiptId(0), disconnectReceiptId("-1"), subscriptionsLogById(),
-          inventory(), wishList() {}
+          inventory(), wishList(), addBookMutex() {}
 
 UserData::~UserData() {
     auto it = inventory.begin();
@@ -66,9 +66,12 @@ void UserData::addBook(string topic, Book &book) {
     // topic is not found in inventory
     if (!isAvailableBook(topic, book.getBookName())) {
         if (inventory.find(topic) == inventory.end()) {
+            std::lock_guard<std::mutex> lock(addBookMutex);
             inventory.insert(make_pair(topic, vector<Book *>()));
+
         }
         // topic is exist
+        std::lock_guard<std::mutex> lock(addBookMutex);
         vector<Book *> *listOfBooks = &inventory.at(topic);
         listOfBooks->push_back(&book);
     }
