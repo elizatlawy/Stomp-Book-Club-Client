@@ -8,6 +8,7 @@ include_directories(include)
 include_directories(src)
 link_libraries("-lboost_system -pthread")
 find_package(Threads)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -Wall -Weffc++ -std=c++11 -Wextra")
 
 
 add_executable(Boost_Echo_Client

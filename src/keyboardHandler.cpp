@@ -12,8 +12,6 @@ using namespace std;
 keyboardHandler::keyboardHandler() {}
 
 keyboardHandler::~keyboardHandler() {
-    delete connectionHandler;
-    delete serverHandlerThread;
     delete userData;
 }
 
@@ -24,7 +22,7 @@ void keyboardHandler::run() {
     // while user not logged in, he cant to do any command besides login
     bool flag = true;
     while (flag) {
-        while (!userData->isLoggedIn()) {
+        while (!userData->isLoggedIn() && flag) {
             userData->setLoginLock(true);
             string lastUserInput;
             getline(cin, lastUserInput);
@@ -37,7 +35,7 @@ void keyboardHandler::run() {
                     cout << "Could not connect to the server" << endl;
             }
             else if(userInputVector[0] == "bye"){
-                terminate();
+                flag = false;
             }
             else
                 cout << "you are not logged in, please login first" << endl;
@@ -68,11 +66,11 @@ void keyboardHandler::run() {
                 if(userData->isLoggedIn())
                     cout << "in order to exit the program, please logout first" << endl;
                 else
-                    terminate();
+                    flag = false;
             }
             while(userData->isLogOutLock()){}
         }
-        serverHandlerThread->join();
+        //serverHandlerThread->join();
         cout << "you have been DISCONNECTED, bye bye..." << endl;
     }
 }
