@@ -211,7 +211,9 @@ void keyboardHandler::processLogOut() {
 }
 
 void keyboardHandler::sendMessage(string msg) {
-    connectionHandler->sendLine(msg);
+    if (!connectionHandler->sendLine(msg)) {
+        std::cout << "Failed to send message, connection lost\n" << std::endl;
+    }
 }
 
 vector<string> keyboardHandler::parseBySpace(string lastUserInput) {

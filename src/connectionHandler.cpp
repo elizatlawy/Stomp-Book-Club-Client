@@ -29,7 +29,7 @@ bool ConnectionHandler::connect(std::string host, short port) {
 
     }
     catch (std::exception& e) {
-        //std::cerr << "Connection failed (Error: " << e.what() << ')' << std::endl;
+        std::cerr << "Connection failed (Error: " << e.what() << ')' << std::endl;
         return false;
     }
     connected = true;
@@ -62,7 +62,7 @@ bool ConnectionHandler::sendBytes(const char bytes[], int bytesToWrite) {
 		if(error)
 			throw boost::system::system_error(error);
     } catch (std::exception& e) {
-        std::cerr << "recv failed (Error: " << e.what() << ')' << std::endl;
+        //std::cerr << "recv failed (Error: " << e.what() << ')' << std::endl;
         return false;
     }
     return true;

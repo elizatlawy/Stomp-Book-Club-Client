@@ -16,25 +16,27 @@ serverHandler::~serverHandler() {}
 void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         string message;
-        connectionHandler->getLine(message);
-        if (message != "") {
-            vector<std::string> serverOutputMessage = parseByLine(message);
-            if (serverOutputMessage[0] == "CONNECTED") {
-                handleConnectedFrame();
-            } else if (serverOutputMessage[0] == "RECEIPT") {
-                string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-                handleReceiptFrame(receiptId);
-            } else if (serverOutputMessage[0] == "ERROR") {
-                string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
-                handleErrorFrame(errorMessage);
-            } else if (serverOutputMessage[0] == "MESSAGE") {
-                string msgBody = serverOutputMessage[5];
-                cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
-                string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
-                handleMessageFrame(topic, msgBody);
-            }
-        } else
-            cout << "Client received empty string" << endl;
+        if (!connectionHandler->getLine(message)) {
+            std::cout << "Disconnected. Exiting...\n" << std::endl;
+            connectionHandler->close();
+            userData->logout();
+            break;
+        }
+        vector<std::string> serverOutputMessage = parseByLine(message);
+        if (serverOutputMessage[0] == "CONNECTED") {
+            handleConnectedFrame();
+        } else if (serverOutputMessage[0] == "RECEIPT") {
+            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
+            handleReceiptFrame(receiptId);
+        } else if (serverOutputMessage[0] == "ERROR") {
+            string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
+            handleErrorFrame(errorMessage);
+        } else if (serverOutputMessage[0] == "MESSAGE") {
+            string msgBody = serverOutputMessage[5];
+            cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
+            string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
+            handleMessageFrame(topic, msgBody);
+        }
     }
 }
 
@@ -160,7 +162,9 @@ void serverHandler::handleErrorFrame(string errorMessage) {
 }
 
 void serverHandler::sendMessage(string msg) {
-    connectionHandler->sendLine(msg);
+    if (!connectionHandler->sendLine(msg)) {
+        std::cout << "Failed to send message, connection lost\n" << std::endl;
+    }
 }
 
 vector<string> serverHandler::parseByLine(string message) {
