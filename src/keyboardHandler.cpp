@@ -9,10 +9,11 @@
 
 using namespace std;
 
-keyboardHandler::keyboardHandler(): connectionHandler(), userData() {
+keyboardHandler::keyboardHandler(): connectionHandler(), userData(), serverHandlerThread() {
     userData = new UserData;
     connectionHandler = new ConnectionHandler();
     serverHandler_  = new serverHandler(*connectionHandler, *userData);
+    serverHandlerThread = new thread(&serverHandler::run, *serverHandler_);
 }
 
 keyboardHandler::~keyboardHandler() {
@@ -88,7 +89,8 @@ bool keyboardHandler::establishConnection(vector<string> &userInputVector) {
     int port = stoi(input.substr(input.find(':') + 1, input.size()));
     if (connectionHandler->connect(host, short(port))) {
         // create serverHandler thread
-
+        serverHandlerThread->join();
+        delete serverHandlerThread;
         serverHandlerThread = new thread(&serverHandler::run, *serverHandler_);
         return true;
     }
