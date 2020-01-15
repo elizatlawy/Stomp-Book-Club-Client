@@ -24,21 +24,22 @@ void serverHandler::run() {
             userData->setLogOutLock(false);
             break;
         }
-        vector<std::string> serverOutputMessage = parseByLine(message);
-        if (serverOutputMessage[0] == "CONNECTED") {
-            handleConnectedFrame();
-        } else if (serverOutputMessage[0] == "RECEIPT") {
-            string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
-            handleReceiptFrame(receiptId);
-        } else if (serverOutputMessage[0] == "ERROR") {
-            string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
-            handleErrorFrame(errorMessage);
-        } else if (serverOutputMessage[0] == "MESSAGE") {
-            cout << serverOutputMessage[1] << endl;
-            string msgBody = serverOutputMessage[5];
-            cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
-            string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
-            handleMessageFrame(topic, msgBody);
+        if(message.length() > 0){
+            vector<std::string> serverOutputMessage = parseByLine(message);
+            if (serverOutputMessage[0] == "CONNECTED") {
+                handleConnectedFrame();
+            } else if (serverOutputMessage[0] == "RECEIPT") {
+                string receiptId = serverOutputMessage[1].substr(serverOutputMessage[1].find(':') + 1);
+                handleReceiptFrame(receiptId);
+            } else if (serverOutputMessage[0] == "ERROR") {
+                string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
+                handleErrorFrame(errorMessage);
+            } else if (serverOutputMessage[0] == "MESSAGE") {
+                string msgBody = serverOutputMessage[5];
+                cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
+                string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
+                handleMessageFrame(topic, msgBody);
+            }
         }
     }
 }
