@@ -79,8 +79,7 @@ void keyboardHandler::run() {
             }
             while (userData->isLogOutLock()) {}
         }
-        //serverHandlerThread->join();
-        cout << "you have been DISCONNECTED, bye bye..." << endl;
+        //cout << "you have been DISCONNECTED, bye bye..." << endl;
     }
 }
 
