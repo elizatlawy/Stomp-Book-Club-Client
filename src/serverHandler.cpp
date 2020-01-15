@@ -33,6 +33,7 @@ void serverHandler::run() {
             string errorMessage = serverOutputMessage[2].substr(serverOutputMessage[1].find(':') - 1);
             handleErrorFrame(errorMessage);
         } else if (serverOutputMessage[0] == "MESSAGE") {
+            cout << serverOutputMessage[1] << endl;
             string msgBody = serverOutputMessage[5];
             cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
             string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);

@@ -23,7 +23,6 @@ private:
     void handleMessageFrame(string topic, string msgBody);
     void sendMessage (string msg);
     vector<string> parseByLine(string message);
-    vector<string> parseBySpace(string message);
     void wishBookExecutor(string topic, string msgBody);
     void hasBookExecutor(string topic, string msgBody);
     void takeBookExecutor(string topic, string msgBody);

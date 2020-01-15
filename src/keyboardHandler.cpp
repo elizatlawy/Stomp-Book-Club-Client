@@ -10,9 +10,9 @@
 
 using namespace std;
 
-keyboardHandler::keyboardHandler(): connectionHandler(), userData(), serverHandlerThread() {
-    userData = new UserData;
+keyboardHandler::keyboardHandler(): connectionHandler(), userData(), serverHandlerThread(), serverHandler_() {
     connectionHandler = new ConnectionHandler();
+    userData = new UserData;
     serverHandler_  = new serverHandler(*connectionHandler, *userData);
     serverHandlerThread = new thread(&serverHandler::run, *serverHandler_);
 }
@@ -227,8 +227,8 @@ vector<string> keyboardHandler::parseBySpace(string lastUserInput) {
 };
 
 string keyboardHandler::createBookName(vector<string> &userInputVector) {
-    string bookName = "";
-    for (int i = 2; i < userInputVector.size(); i++) {
+    string bookName;
+    for (int i = 2; (unsigned)i < userInputVector.size(); i++) {
         bookName = string(bookName) + string(userInputVector[i]) + string(" ");
     }
     bookName = bookName.substr(0, bookName.length() - 1);
