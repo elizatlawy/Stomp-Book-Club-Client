@@ -215,7 +215,7 @@ void keyboardHandler::sendMessage(string msg) {
     if (!connectionHandler->sendLine(msg)) {
         connectionHandler->close();
         userData->logout();
-        std::cout << "Failed to send message, connection lost\n" << std::endl;
+        std::cout << "Failed to send message, connection lost" << std::endl;
     }
 }
 

@@ -18,7 +18,7 @@ void serverHandler::run() {
     while (connectionHandler->isConnected()) {
         string message;
         if (!connectionHandler->getLine(message)) {
-            std::cout << "Disconnected. Exiting...\n" << std::endl;
+            std::cout << "Failed to get answer form server, connection lost" << std::endl;
             connectionHandler->close();
             userData->logout();
             break;
@@ -167,7 +167,7 @@ void serverHandler::sendMessage(string msg) {
     if (!connectionHandler->sendLine(msg)) {
         connectionHandler->close();
         userData->logout();
-        std::cout << "Failed to send message, connection lost\n" << std::endl;
+        std::cout << "Failed to send message, connection lost" << std::endl;
     }
 }
 
