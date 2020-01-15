@@ -21,6 +21,7 @@ void serverHandler::run() {
             std::cout << "Failed to get answer form server, connection lost" << std::endl;
             connectionHandler->close();
             userData->logout();
+            userData->setLogOutLock(false);
             break;
         }
         vector<std::string> serverOutputMessage = parseByLine(message);
@@ -167,6 +168,7 @@ void serverHandler::sendMessage(string msg) {
     if (!connectionHandler->sendLine(msg)) {
         connectionHandler->close();
         userData->logout();
+        userData->setLogOutLock(false);
         std::cout << "Failed to send message, connection lost" << std::endl;
     }
 }

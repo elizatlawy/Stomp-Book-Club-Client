@@ -18,10 +18,11 @@ keyboardHandler::keyboardHandler(): connectionHandler(), userData(), serverHandl
 }
 
 keyboardHandler::~keyboardHandler() {
-    delete connectionHandler;
+
     serverHandlerThread->join();
     delete serverHandlerThread;
     delete serverHandler_;
+    delete connectionHandler;
     delete userData;
 }
 
@@ -41,7 +42,7 @@ void keyboardHandler::run() {
                     processLogin(userInputVector);
                     while (userData->isLoginLock()) {}
                 } else
-                    cout << "Could not connect to the server" << endl;
+                    cout << "Could not connect to server" << endl;
             } else if (userInputVector[0] == "bye") {
                 flag = false;
             } else
@@ -215,6 +216,7 @@ void keyboardHandler::sendMessage(string msg) {
     if (!connectionHandler->sendLine(msg)) {
         connectionHandler->close();
         userData->logout();
+        userData->setLogOutLock(false);
         std::cout << "Failed to send message, connection lost" << std::endl;
     }
 }
