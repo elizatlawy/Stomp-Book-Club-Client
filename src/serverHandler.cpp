@@ -13,17 +13,19 @@ serverHandler::serverHandler(ConnectionHandler &connectionHandler, UserData &use
         &connectionHandler), userData(&userData) {}
 
 // copy constructor
-serverHandler::serverHandler(const serverHandler &other): connectionHandler(), userData() {
+serverHandler::serverHandler(const serverHandler &other) : connectionHandler(), userData() {
     connectionHandler = other.connectionHandler;
     userData = other.userData;
 }
+
+// copy assignment
 serverHandler &serverHandler::operator=(const serverHandler &other) {
     // check for self assignment
     if (this == &other)
-        return  *this;
+        return *this;
     // first destroy old resources
     delete connectionHandler;
-    delete  userData;
+    delete userData;
     // copy resources of other
     connectionHandler = other.connectionHandler;
     userData = other.userData;
@@ -32,7 +34,6 @@ serverHandler &serverHandler::operator=(const serverHandler &other) {
 
 // destructor
 serverHandler::~serverHandler() {}
-
 
 
 void serverHandler::run() {
@@ -45,7 +46,7 @@ void serverHandler::run() {
             userData->setLogOutLock(false);
             break;
         }
-        if(message.length() > 0){
+        if (message.length() > 0) {
             vector<std::string> serverOutputMessage = parseByLine(message);
             if (serverOutputMessage[0] == "CONNECTED") {
                 handleConnectedFrame();
@@ -57,7 +58,7 @@ void serverHandler::run() {
                 handleErrorFrame(errorMessage);
             } else if (serverOutputMessage[0] == "MESSAGE") {
                 string msgBody = serverOutputMessage[5];
-                cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
+                //cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
                 string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
                 handleMessageFrame(topic, msgBody);
             }
@@ -66,35 +67,19 @@ void serverHandler::run() {
 }
 
 void serverHandler::handleMessageFrame(string topic, string msgBody) {
-    // message type is wish to borrow
-    if (msgBody.find("wish to borrow") != string::npos) {
-        cout << "Client STARTED process: " + msgBody << endl;
-        wishBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process: " + msgBody << endl;
-    }
-        // message type is {User} has {bookName} or  {User} has added the book
 
-    else if (msgBody.find("Taking") != string::npos) {
-        cout << "Client STARTED process:" + msgBody << endl;
+    if (msgBody.find("wish to borrow") != string::npos) {
+        wishBookExecutor(topic, msgBody);
+    } else if (msgBody.find("Taking") != string::npos) {
         takeBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process:" + msgBody << endl;
     } else if (msgBody.find("Returning") != string::npos) {
-        cout << "Client STARTED process:" + msgBody << endl;
         returnBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process: " + msgBody << endl;
     } else if (msgBody.find("book status") != string::npos) {
-        cout << "Client STARTED process: " + msgBody << endl;
         bookStatusExecutor(topic);
-        cout << "Client FINISHED process: " + msgBody << endl;
     } else if (msgBody.find("has added") == string::npos) {
-        cout << "Client STARTED process:" + msgBody << endl;
+        // handle message type is {User} has {bookName}
         hasBookExecutor(topic, msgBody);
-        cout << "Client FINISHED process:" + msgBody << endl;
     }
-        // TODO: delete this before submission
-        // else this is the  book status of other users message
-    else
-        cout << msgBody << endl;
 } // end of handleMessageFrame
 
 void serverHandler::wishBookExecutor(string topic, string msgBody) {
@@ -124,7 +109,6 @@ void serverHandler::hasBookExecutor(string topic, string msgBody) {
     }
 }
 
-// TODO: handle the case of long book name with spaces
 void serverHandler::takeBookExecutor(string topic, string msgBody) {
     string toTakeFromName = msgBody.substr(msgBody.find_last_of(' ') + 1);
     if (toTakeFromName == userData->getUserName()) {

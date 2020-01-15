@@ -22,6 +22,7 @@ keyboardHandler::keyboardHandler(const keyboardHandler &other): connectionHandle
     connectionHandler = other.connectionHandler;
     userData = other.userData;
 }
+// copy assignment
 keyboardHandler &keyboardHandler::operator=(const keyboardHandler &other) {
     // check for self assignment
     if (this == &other)
@@ -51,9 +52,9 @@ void keyboardHandler::run() {
     cout << "enter input:" << endl;
     vector<string> userInputVector;
     // while user not logged in, he cant to do any command besides login
-    bool flag = true;
-    while (flag) {
-        while (!userData->isLoggedIn() && flag) {
+    bool bye = false;
+    while (!bye) {
+        while (!userData->isLoggedIn() && !bye) {
             userData->setLoginLock(true);
             string lastUserInput;
             getline(cin, lastUserInput);
@@ -65,7 +66,7 @@ void keyboardHandler::run() {
                 } else
                     cout << "Could not connect to server" << endl;
             } else if (userInputVector[0] == "bye") {
-                flag = false;
+                bye = true;
             } else
                 cout << "you are not logged in, please login first" << endl;
         } // end of first while
@@ -96,7 +97,7 @@ void keyboardHandler::run() {
                 if (userData->isLoggedIn())
                     cout << "in order to exit the program, please logout first" << endl;
                 else
-                    flag = false;
+                    bye = true;
             }
             while (userData->isLogOutLock()) {}
         }
