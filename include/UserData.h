@@ -14,7 +14,6 @@ using namespace std;
 class UserData {
 public:
     UserData(); // constructor
-
     virtual ~UserData(); // destructor
 
     const string &getUserName() const;
@@ -60,8 +59,8 @@ private:
     bool loggedIn;
     int subscriptionId;
     int receiptId;
-    bool loginLock = true;
-    bool logOutLock = false;
+    bool loginLock;
+    bool logOutLock;
     string disconnectReceiptId;
     unordered_map<std::string,std::vector<Book*>> inventory;
     vector<string> wishList; // vector of wished book names

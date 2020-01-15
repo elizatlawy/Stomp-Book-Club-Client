@@ -6,8 +6,9 @@
 
 
 UserData::UserData()
-        : loggedIn(false), subscriptionId(0), receiptId(0), disconnectReceiptId("-1"), subscriptionsLogById(),
-          inventory(), wishList(), addBookMutex() {}
+        : userName(), userPassword(), loggedIn(false), subscriptionId(0),
+        receiptId(0),loginLock(true), logOutLock(false), disconnectReceiptId("-1"), inventory(), wishList(),
+          subscriptionsLogByTopic(), subscriptionsLogById(),commandLog(), addBookMutex() {}
 
 UserData::~UserData() {
     auto it = inventory.begin();
@@ -188,6 +189,7 @@ string UserData::getBookOwner(string topic, string bookName) {
                 return currBook->getBookOwner();
         }
     }
+    return "";
 }
 
 void UserData::addTopic(string topic) {

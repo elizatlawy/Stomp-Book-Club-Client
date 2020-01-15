@@ -12,7 +12,15 @@ using namespace std;
 serverHandler::serverHandler(ConnectionHandler &connectionHandler, UserData &userData) : connectionHandler(
         &connectionHandler), userData(&userData) {}
 
+// copy constructor
+serverHandler::serverHandler(const serverHandler &other) {
+    connectionHandler = other.connectionHandler;
+    userData = other.userData;
+}
+// destructor
 serverHandler::~serverHandler() {}
+
+
 
 void serverHandler::run() {
     while (connectionHandler->isConnected()) {
@@ -183,6 +191,7 @@ vector<string> serverHandler::parseByLine(string message) {
     }
     return results;
 }
+
 
 
 

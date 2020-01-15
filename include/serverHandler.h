@@ -12,7 +12,7 @@
 class serverHandler {
 public:
     serverHandler(ConnectionHandler &connectionHandler, UserData &userData); // constructor
-
+    serverHandler(const serverHandler& other); // copy constructor
     virtual ~serverHandler(); // destructor
 
     void run();
