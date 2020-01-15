@@ -16,7 +16,8 @@ using namespace std;
 class keyboardHandler {
 public:
     keyboardHandler(); // constructor
-
+    keyboardHandler(const keyboardHandler& other); // copy constructor
+    keyboardHandler& operator=(const keyboardHandler& other); // copy assignment
     virtual ~keyboardHandler(); // destructor
 
     void run();

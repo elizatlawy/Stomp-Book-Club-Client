@@ -13,10 +13,23 @@ serverHandler::serverHandler(ConnectionHandler &connectionHandler, UserData &use
         &connectionHandler), userData(&userData) {}
 
 // copy constructor
-serverHandler::serverHandler(const serverHandler &other) {
+serverHandler::serverHandler(const serverHandler &other): connectionHandler(), userData() {
     connectionHandler = other.connectionHandler;
     userData = other.userData;
 }
+serverHandler &serverHandler::operator=(const serverHandler &other) {
+    // check for self assignment
+    if (this == &other)
+        return  *this;
+    // first destroy old resources
+    delete connectionHandler;
+    delete  userData;
+    // copy resources of other
+    connectionHandler = other.connectionHandler;
+    userData = other.userData;
+    return *this;
+}
+
 // destructor
 serverHandler::~serverHandler() {}
 
@@ -191,6 +204,12 @@ vector<string> serverHandler::parseByLine(string message) {
     }
     return results;
 }
+
+
+
+
+
+
 
 
 

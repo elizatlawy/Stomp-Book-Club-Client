@@ -17,6 +17,27 @@ keyboardHandler::keyboardHandler(): connectionHandler(), userData(), serverHandl
     serverHandlerThread = new thread(&serverHandler::run, *serverHandler_);
 }
 
+// copy constructor
+keyboardHandler::keyboardHandler(const keyboardHandler &other): connectionHandler(), userData(), serverHandlerThread(), serverHandler_() {
+    connectionHandler = other.connectionHandler;
+    userData = other.userData;
+}
+keyboardHandler &keyboardHandler::operator=(const keyboardHandler &other) {
+    // check for self assignment
+    if (this == &other)
+        return  *this;
+    // first destroy old resources
+    delete connectionHandler;
+    delete  userData;
+    // copy resources of other
+    connectionHandler = other.connectionHandler;
+    userData = other.userData;
+    return *this;
+}
+
+
+
+// destructor
 keyboardHandler::~keyboardHandler() {
 
     serverHandlerThread->join();
@@ -235,5 +256,7 @@ string keyboardHandler::createBookName(vector<string> &userInputVector) {
     bookName = bookName.substr(0, bookName.length() - 1);
     return bookName;
 }
+
+
 
 
