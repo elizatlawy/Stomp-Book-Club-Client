@@ -18,7 +18,7 @@ private:
     bool connected;
     std::mutex sendLineMutex;
 
- 
+
 public:
     ConnectionHandler();
     virtual ~ConnectionHandler(); // destructor

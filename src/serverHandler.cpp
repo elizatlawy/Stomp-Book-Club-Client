@@ -58,8 +58,8 @@ void serverHandler::run() {
                 handleErrorFrame(errorMessage);
             } else if (serverOutputMessage[0] == "MESSAGE") {
                 string msgBody = serverOutputMessage[5];
-                //cout << string("Client Received MESSAGE from Server: " + msgBody) << endl;
                 string topic = serverOutputMessage[3].substr(serverOutputMessage[3].find(':') + 1);
+                cout << string(topic + ":" + msgBody) << endl;
                 handleMessageFrame(topic, msgBody);
             }
         }
